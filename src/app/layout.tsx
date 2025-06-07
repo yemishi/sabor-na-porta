@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Provider from "@/context/Provider";
+import { Header } from "@/components";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,7 +19,8 @@ export default function RootLayout({
     <html lang="en">
       <Provider session={session}>
         <body className="w-full h-full overflow-x-hidden">
-          <div className="w-full h-screen">{children}</div>
+          <Header />
+          <div className="w-full h-screen overflow-x-hidden">{children}</div>
           <div className="w-full" id="modal" />
         </body>
       </Provider>
