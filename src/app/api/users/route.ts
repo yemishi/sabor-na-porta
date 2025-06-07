@@ -5,7 +5,16 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   const take = Number(req.nextUrl.searchParams.get("take") || 10);
   const page = Number(req.nextUrl.searchParams.get("page") || 0);
+  const phone = req.nextUrl.searchParams.get("phone");
   try {
+    if (phone) {
+      const user = await db.user.findFirst({
+        where: { phone },
+        select: { address: true, phone: true, id: true, isAdmin: true, name: true },
+      });
+      if (!user) return NextResponse.json({ message: "User not found." }, { status: 404 });
+      return NextResponse.json({ message: "User found successfully", user }, { status: 200 });
+    }
     const skip = page * take;
 
     const [users, count] = await Promise.all([db.user.findMany({ skip, take: take * page }), db.user.count()]);
