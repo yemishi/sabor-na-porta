@@ -1,9 +1,11 @@
 import { clsMerge } from "@/helpers";
 import { HTMLAttributes } from "react";
 
-interface Props extends HTMLAttributes<HTMLDivElement> {}
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  isPage?: boolean;
+}
 
-export default function Loading({ ...props }: Props) {
+export default function Loading({ isPage = true, ...props }: Props) {
   const { className, ...rest } = props;
 
   return (
@@ -11,7 +13,9 @@ export default function Loading({ ...props }: Props) {
       {...rest}
       className={clsMerge(
         className,
-        "flex justify-center items-center h-full w-full absolute top-0 left-0 bg-background/60 backdrop-blur-xs z-10"
+        `flex justify-center items-center ${
+          isPage ? "absolute h-full w-full" : ""
+        } top-0 left-0 bg-background/60 backdrop-blur-xs z-10`
       )}
       role="status"
     >
