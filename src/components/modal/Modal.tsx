@@ -9,7 +9,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 }
 
 const Modal = ({ children, onClose, ...props }: Props) => {
-  const { className, ...rest } = props;
+  const { className = "", ...rest } = props;
 
   const modalRoot = document.getElementById("modal");
   useEffect(() => {
