@@ -30,11 +30,12 @@ export default function useForm<T>(initialValues: FormFields) {
 
     const { compareField, max, min, validate, isEmail, minMessage, maxMessage } = field;
     const isNumberField = !isNaN(parseFloat(value as string));
-    const len = isNumberField ? Number(value) : (value as string).length;
+    const rawValue = value as string | number;
+    const isString = typeof rawValue === "string";
+    const len = isString ? rawValue.length : String(rawValue).length;
 
     if (max && len > max!)
       return maxMessage || (isNumberField ? `Must be ${max} or less` : `Must be ${max} characters or fewer`);
-
     if (min && len < min)
       return minMessage || (isNumberField ? `Must be at least ${min}` : `Must be at least ${min} characters long`);
 
