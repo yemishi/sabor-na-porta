@@ -8,23 +8,22 @@ import eyeClosed from "./assets/eye-closed.svg";
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error?: string;
-  borderColor?: string;
   isPassword?: boolean;
+  bgColor?: string;
   disableErrorMsg?: boolean;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-  const { label, className, placeholder, id, isPassword, error, disableErrorMsg, borderColor, ...rest } = props;
+  const { label, bgColor, className, placeholder, id, isPassword, error, disableErrorMsg, ...rest } = props;
   const [isPass, setIsPass] = useState(isPassword);
-
   const type = isPass ? "password" : rest.type || "text";
 
-  const hasValue = !!rest.value;
+  const hasValue = rest.value !== null && rest.value !== undefined && rest.value !== "";
   return (
     <div
       className={`${clsMerge(
         className,
-        `${borderColor ? `border-${borderColor}` : ""} ${
+        ` ${
           rest.disabled ? "pointer-none opacity-60" : ""
         } flex border-2 lg:text-lg flex-col group focus-within:border-secondary gap-1 font-kanit relative p-3 
           rounded-xl group focus-within:border-secondary-400`
@@ -32,8 +31,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     >
       <label
         htmlFor={id || rest.name}
-        className={`absolute left-4  bottom-2.5 origin-left transition-all  ${
-          hasValue ? "bg-background px-2 -translate-y-6 scale-90 translate-x-1.5" : "pointer-events-none"
+        className={`absolute left-4  bottom-2.5 origin-left transition-all opacity-50  ${
+          hasValue
+            ? `px-2 -translate-y-6 scale-90 translate-x-1.5 ${bgColor ?? "bg-background"}`
+            : "pointer-events-none"
         }`}
       >
         {label || placeholder}
