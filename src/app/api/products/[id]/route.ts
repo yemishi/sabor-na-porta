@@ -21,6 +21,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     const productData = await db.product.findFirst({ where: { id } });
 
     if (!productData) return NextResponse.json({ message: "Product not found." }, { status: 404 });
+    console.log(body,"AAAAAAAAAAAA")
     await db.product.update({
       where: { id },
       data: {
@@ -28,6 +29,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         picture: body.picture || productData.picture,
         category: body.category || productData.category,
         variants: body.variants || productData.variants,
+        highlights: body.highlights,
       },
     });
 
