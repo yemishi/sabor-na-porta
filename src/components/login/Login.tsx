@@ -40,6 +40,7 @@ export default function Login({ onClose }: { onClose: () => void }) {
       console.log(response);
       return;
     }
+    onClose();
     return;
   };
 
@@ -109,7 +110,7 @@ export default function Login({ onClose }: { onClose: () => void }) {
         <Image src={exit} />
       </button>
 
-      <h1 className="text-4xl  font-title mt-14 sm:mt-24 md:mt-40">Bem-vindo ao Sabor</h1>
+      <h2 className="text-4xl font-title mt-14 sm:mt-24 md:mt-40">Bem-vindo ao Sabor</h2>
       <StepDesc desc={desc} />
       <form onSubmit={onSubmit} className="flex flex-col gap-4 h-full py-6">
         <InputPhone
