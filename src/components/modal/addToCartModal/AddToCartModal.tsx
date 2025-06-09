@@ -17,7 +17,11 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
 
   const [selectedAddons, setSelectedAddons] = useState<AddOn[]>([]);
   const [variant, setVariant] = useState<ProductVariant>(variantSelected);
-  const [quantity, setQuantity] = useState(0);
+
+  const qtdData = getQuantity(variantSelected, selectedAddons);
+  const isLimit = variant.stock > 0 && qtdData >= variant.stock;
+
+  const [quantity, setQuantity] = useState(!isLimit && variant.stock > 0 ? 1 : 0);
   const [obs, setObs] = useState("");
 
   useEffect(() => {
@@ -27,12 +31,7 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
   const toggleAddon = (addon: AddOn) => {
     setSelectedAddons((prev) => {
       const exists = prev.some((a) => a.name === addon.name);
-
-      if (exists) {
-        return prev.filter((a) => a.name !== addon.name);
-      } else {
-        return [...prev, addon];
-      }
+      return exists ? prev.filter((a) => a.name !== addon.name) : [...prev, addon];
     });
   };
 
@@ -48,7 +47,6 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
       setQuantity(getQuantity(found, []));
     }
   };
-
   const isOutOfStock = variant.stock === 0;
   const canAddToCart = quantity > 0 && quantity <= variant.stock;
 
@@ -68,12 +66,10 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
     addItem(cartProduct);
     onClose();
   };
-  const qtdData = getQuantity(variantSelected, selectedAddons);
-  const isLimit = variant.stock > 0 && qtdData >= variant.stock;
 
   return (
-    <Modal onClose={onClose} className="modal-container !bg-cream">
-      <div className="flex flex-col gap-4 p-4  rounded-lg max-w-md w-full h-full overflow-y-auto">
+    <Modal onClose={onClose} className="modal-container animate-dropDown ">
+      <div className="flex flex-col gap-5 p-5 sm:p-6 mx-auto rounded-xl w-full md:px-10 h-full overflow-y-auto">
         <button
           onClick={onClose}
           className="size-10 ml-auto cursor-pointer active:scale-95 hover:scale-105 transition-all"
@@ -82,17 +78,17 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
         </button>
 
         <div className="flex items-center gap-4">
-          <Image src={product.picture} className="size-28 rounded-md object-cover" />
+          <Image src={product.picture} className="size-28 sm:size-32 rounded-md object-cover" />
           <div className="flex flex-col">
-            <h2 className="text-lg font-bold text-dark">{product.name}</h2>
-            <span className="text-sm text-primary">{variant.name}</span>
-            {variant.desc && <p className="text-sm text-primary">{variant.desc}</p>}
+            <h2 className="text-xl sm:text-2xl font-bold text-dark">{product.name}</h2>
+            <span className="text-base text-primary">{variant.name}</span>
+            {variant.desc && <p className="text-sm sm:text-base text-primary">{variant.desc}</p>}
           </div>
         </div>
 
         {product.variants.length > 1 && (
           <div>
-            <label className="text-sm font-medium text-dark block mb-1">Escolher variação</label>
+            <label className="text-sm font-medium text-dark block mb-2">Escolher variação</label>
             <Select value={variant.id} onChange={(e) => handleVariantChange(e.target.value)} className="w-full">
               {product.variants.map((v) => (
                 <option key={v.id} value={v.id}>
@@ -105,59 +101,82 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
 
         {variant.addons.length > 0 && (
           <div>
-            <h3 className="text-md font-semibold text-dark mb-2">Adicionais</h3>
-            <div className="flex flex-col gap-2">
-              {variant.addons.map((addon) => (
-                <label key={addon.name} className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={selectedAddons.some((a) => a.name === addon.name)}
-                    onChange={() => toggleAddon(addon)}
-                  />
-                  <span className="flex-1">{addon.name}</span>
-                  <span className="text-sm text-secondary">{formatBRL(addon.price)}</span>
-                </label>
-              ))}
+            <h3 className="text-lg font-semibold text-dark mb-3">Adicionais</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {variant.addons.map((addon) => {
+                const isSelected = selectedAddons.some((a) => a.name === addon.name);
+                return (
+                  <button
+                    key={addon.name}
+                    type="button"
+                    onClick={() => toggleAddon(addon)}
+                    className={`flex justify-between items-center p-3 rounded-lg border transition-all text-left
+          ${isSelected ? "bg-primary/10 border-primary text-primary" : "bg-white border-dark/20 text-dark"}
+          hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary`}
+                  >
+                    <div className="flex flex-col">
+                      <span className="font-medium md:text-lg">{addon.name}</span>
+                      <span className="text-sm text-secondary md:text-base md:text-dark">{formatBRL(addon.price)}</span>
+                    </div>
+                    <div
+                      className={`size-5 rounded border border-dark/20 flex items-center justify-center ${
+                        isSelected ? "bg-primary text-white" : "bg-white"
+                      }`}
+                    >
+                      {isSelected && <span className="text-sm font-bold">✓</span>}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
+
         {qtdData > 0 && (
-          <div>
+          <div className="text-base">
             Você já tem <strong>{qtdData}</strong> {qtdData === 1 ? "unidade" : "unidades"} no carrinho.
           </div>
         )}
+
         {isLimit && (
           <div className="text-orange-600 font-semibold mt-2">Você já adicionou todas as unidades disponíveis 🧃</div>
         )}
-        <div className={`flex justify-between items-center mt-2 ${isLimit ? "opacity-40 pointer-events-none" : ""}`}>
+
+        <div
+          className={`flex justify-between items-center mt-4 text-base ${
+            isLimit ? "opacity-40 pointer-events-none" : ""
+          }`}
+        >
           <span className="font-medium text-dark">Quantidade</span>
           <InputNumber
             label=" "
             value={quantity}
             min={1}
+            max={variant.stock}
             onChange={(e) => {
               const val = Number(e.target.value);
               if (val + qtdData <= variant.stock && val !== -1) setQuantity(val);
             }}
-            max={variant.stock}
-            className="w-20"
+            className="w-24 text-base"
             disabled={isOutOfStock}
           />
         </div>
+
         <textarea
-          className={`w-full min-h-30 outline-none bg-background border p-2 rounded-lg border-dark/50 ${
+          className={`w-full min-h-28 text-base outline-none bg-background border p-3 rounded-lg border-dark/40 transition ${
             isLimit ? "opacity-40 pointer-events-none" : ""
           }`}
           placeholder="Observação?"
           value={obs}
           onChange={(e) => setObs(e.target.value)}
         />
-        <div className="flex justify-between  items-center  mt-auto mb-10">
-          <span className="font-bold text-lg text-primary">
+
+        <div className="flex justify-between items-center mt-auto">
+          <span className="font-bold text-xl text-primary">
             {isOutOfStock ? "Sem estoque" : `Total: ${formatBRL(totalPrice)}`}
           </span>
           <Button
-            className="bg-primary text-white  font-semibold px-4 py-2 rounded disabled:opacity-50"
+            className="bg-primary text-white font-semibold px-5 py-3 rounded text-base disabled:opacity-50"
             disabled={!canAddToCart || isLimit}
             onClick={addToCart}
           >

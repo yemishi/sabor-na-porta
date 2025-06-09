@@ -25,7 +25,7 @@ export default function Login({ onClose }: { onClose: () => void }) {
       },
     },
     password: { value: "", min: 3 },
-    name: { value: "", min: 3 },
+    name: { value: "", min: 3, max: 15 },
   });
 
   const signInFn = async () => {
@@ -37,7 +37,6 @@ export default function Login({ onClose }: { onClose: () => void }) {
     });
     if (response && !response.ok) {
       setError("phone", "Incorrect phone or password.");
-      console.log(response);
       return;
     }
     onClose();
@@ -88,7 +87,7 @@ export default function Login({ onClose }: { onClose: () => void }) {
   };
   const desc = {
     phoneDesc: "Começamos pelo seu número 📞",
-    hasPassword: "Se lembra daquela senha?",
+    hasPassword: "Tem uma senha guardada aí na memória?",
     newUser: "Como devemos te chamar por aqui?",
   }[userState || "phoneDesc"];
   const submitText = {
@@ -99,7 +98,7 @@ export default function Login({ onClose }: { onClose: () => void }) {
 
   return (
     <Modal
-      className="w-full h-full max-w-2xl md:h-[600px] md:rounded-xl mx-auto relative my-auto bg-background  flex flex-col gap-4  px-6 pt-10 md:pt-12"
+      className="w-full h-full max-w-2xl md:h-[600px] md:rounded-xl mx-auto relative my-auto animate-dropDown bg-background flex flex-col gap-4  px-6 pt-10 md:pt-12"
       onClose={onClose}
     >
       {isLoading && <Loading className="md:rounded-xl" />}
@@ -112,8 +111,9 @@ export default function Login({ onClose }: { onClose: () => void }) {
 
       <h2 className="text-4xl font-title mt-14 sm:mt-24 md:mt-40">Bem-vindo ao Sabor</h2>
       <StepDesc desc={desc} />
-      <form onSubmit={onSubmit} className="flex flex-col gap-4 h-full py-6">
+      <form onSubmit={onSubmit} className="flex flex-col gap-4 h-full py-6 ">
         <InputPhone
+          autoFocus
           disabled={!!userState}
           error={errors.phone || ""}
           name="phone"

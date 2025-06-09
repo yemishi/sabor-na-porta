@@ -1,12 +1,14 @@
 "use client";
 
 import { useCart } from "@/hooks";
-import { formatBRL } from "@/helpers";
+import { formatBRL, getStoreStatus } from "@/helpers";
 import { Button, Image } from "@/ui";
 import { useEffect, useRef, useState } from "react";
 import bag from "@/assets/icons/bag.svg";
 import exit from "@/assets/icons/exit.svg";
 import { Checkout } from "@/components";
+import { useQuery } from "@tanstack/react-query";
+import { Schedule } from "@/types";
 
 export default function Cart() {
   const [isCart, setIsCart] = useState(false);
@@ -34,6 +36,30 @@ export default function Cart() {
   const { cart, getCartTotalPrice, removeItem } = useCart({});
   const onClose = () => setIsCart(false);
   const ref = useRef<HTMLDivElement | null>(null);
+  const {
+    data,
+    isLoading: scheduleLoading,
+    isError: scheduleError,
+  } = useQuery<Schedule[]>({
+    queryKey: ["storeSchedule"],
+    queryFn: async () => {
+      console.log("Buscando horarios...");
+      const res = await fetch("/api/schedule");
+      if (!res.ok) {
+        console.log("Erro ao tentar buscar horarios de funcionamento </3");
+
+        throw new Error("Failed to fetch schedule");
+      }
+      return res.json();
+    },
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const { open: isStoreOpen, message: scheduleMessage } = data
+    ? getStoreStatus(data)
+    : { open: false, message: "Carregando horário..." };
+
+  const buttonText = scheduleLoading ? "Carregando..." : scheduleError || !isStoreOpen ? scheduleMessage : "Continuar";
   return (
     <div ref={ref}>
       {isCheckout && (
@@ -47,15 +73,16 @@ export default function Cart() {
       <button
         onClick={() => setIsCart(!isCart)}
         aria-label="Toggle cart"
-        className="cursor-pointer hover:brightness-110"
+        className="flex items-center gap-2 cursor-pointer hover:brightness-110 md:bg-dark md:px-4 md:py-1 md:rounded-full"
       >
-        <Image src={bag} className="size-9" />
+        <span className="hidden md:inline text-lg font-semibold text-white">{formatBRL(getCartTotalPrice())}</span>
+        <Image src={bag} className="size-9 md:invert md:brightness-0" />
       </button>
       {isCart && (
         <div
-          className="absolute top-15 left-0 md:right-0 md:left-auto md:max-w-96 w-full md:w-auto h-[calc(100dvh-52px)] md:h-auto 
+          className="absolute top-15 left-0 md:right-2 md:left-auto md:max-w-96 w-full md:w-auto h-[calc(100dvh-52px)] md:h-auto 
               pt-4 border border-dark/20 rounded-lg shadow-lg bg-background
-             grid grid-rows-[auto_1fr_auto]"
+             grid grid-rows-[auto_1fr_auto] animate-dropDown md:top-20"
         >
           {!cart.length ? (
             <div className="flex flex-col justify-center h-full text-center px-4 py-6">
@@ -97,13 +124,13 @@ export default function Cart() {
                   >
                     <Image src={item.picture} className="object-cover size-22 rounded-md" alt={item.name} />
 
-                    <div className="flex flex-col justify-between  ml-5">
-                      <span className="font-medium text-lg">{item.name}</span>
-                      <p className="text-sm text-primary">{item.name}</p>
+                    <div className="flex flex-col justify-between ml-5">
+                      <p className="text-sm text-primary md:text-dark font-medium md:text-lg">{item.name}</p>
 
                       {item.addons && item.addons?.length > 0 && (
                         <p className="text-sm text-accent">Extras: {item.addons.map((a) => a.name).join(", ")}</p>
                       )}
+
                       {item.obs && <p className="text-sm italic text-dark line-clamp-2 ">Obs: {item.obs}</p>}
 
                       <span className="text-lg font-semibold text-primary">{formatBRL(item.priceTotal)}</span>
@@ -121,10 +148,10 @@ export default function Cart() {
 
           <Button
             onClick={() => setIsCheckout(true)}
-            disabled={!cart.length}
-            className="mt-auto md:rounded-b-xl scale-100"
+            disabled={!cart.length || scheduleError || scheduleLoading || !isStoreOpen}
+            className="mt-auto md:rounded-b-lg scale-100"
           >
-            Continuar
+            {buttonText}
           </Button>
         </div>
       )}

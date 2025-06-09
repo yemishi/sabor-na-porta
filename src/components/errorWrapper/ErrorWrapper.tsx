@@ -14,7 +14,7 @@ export default function ErrorWrapper({ refetch, children, error, message = "Some
         }}
         className={`${props.className ? props.className : ""} ${
           refetch ? "cursor-pointer hover:brightness-90 transition-all" : ""
-        } w-fit text-lg shadow-md font-bold rounded-lg shadow-gray-400 text-center py-2 px-4`}
+        } w-fit h-fu text-lg shadow-md font-bold rounded-lg shadow-gray-400 text-center py-2 px-4`}
       >
         {message}
       </div>

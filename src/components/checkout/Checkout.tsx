@@ -19,7 +19,7 @@ type Props = {
   onClose: () => void;
 };
 export default function Checkout({ onClose }: Props) {
-  const { data: session } = useSession();
+  const { data: session, status: userStatus } = useSession();
   const [isSign, setIsSign] = useState(false);
   const [action, setAction] = useState<"address" | "editAddress" | "paymentMethod" | "summary" | "order">("address");
   const [method, setMethod] = useState("");
@@ -54,9 +54,9 @@ export default function Checkout({ onClose }: Props) {
   });
 
   const variants = {
-    initial: { opacity: 0, x: "-100%" },
+    initial: { opacity: 0, x: "100%" },
     animate: { x: 0, opacity: 1 },
-    exit: { opacity: 0, x: "100%" },
+    exit: { opacity: 0, x: "-100%" },
   };
   const buttonText = {
     editAddress: "Voltar",
@@ -84,7 +84,7 @@ export default function Checkout({ onClose }: Props) {
     }
     if (action === "order") {
       onClose();
-      push("/products");
+      push("/");
       return;
     }
   };
@@ -102,7 +102,7 @@ export default function Checkout({ onClose }: Props) {
   return (
     <Modal
       onClose={onClose}
-      className="w-full h-full max-w-2xl overflow-x-hidden md:h-[600px] md:rounded-xl mx-auto relative my-auto bg-background flex flex-col gap-4 
+      className="w-full h-full max-w-2xl md:h-[650px] overflow-y-auto overflow-x-hidden md:rounded-xl mx-auto relative my-auto bg-background flex flex-col gap-4 
        px-6 pt-10 md:pt-12"
     >
       {isSign && (
@@ -122,10 +122,10 @@ export default function Checkout({ onClose }: Props) {
         className="size-10 ml-auto cursor-pointer active:scale-95 hover:scale-105 transition-all"
       >
         <Image src={exit} />
-        {userLoading && <Loading />}
+        {userLoading && userStatus === "loading" && <Loading />}
       </button>
 
-      <h2 className="text-xl md:text-2xl font-bold text-primary">{curTitle}</h2>
+      <h2 className="title">{curTitle}</h2>
       <div className="flex justify-between items-center mb-2 text-sm text-muted-foreground">
         <span>
           Passo {Math.min(stepIndex + 1, stepOrder.length)} de {stepOrder.length}
@@ -141,7 +141,7 @@ export default function Checkout({ onClose }: Props) {
       </div>
 
       {session?.user && user && (
-        <div className="relative w-full max-w-xl mx-auto px-4 py-6 min-h-[350px]">
+        <div className="relative w-full max-w-xl mx-auto px-4 py-6 h-full overflow-y-auto overflow-x-hidden">
           <AnimatePresence mode="popLayout">
             {action === "address" && (
               <motion.div
@@ -220,13 +220,16 @@ export default function Checkout({ onClose }: Props) {
                   orderError={orderError}
                   orderRefetch={orderRefetch}
                   orderStatus={orderStatus}
-                  trackOrder={() => push(`/order/${orderData?.orderId}`)}
+                  trackOrder={() => {
+                    push(`/order/${orderData?.id}`);
+                    onClose();
+                  }}
                   status={status}
                   setStatus={setStatus}
                   removeItemById={removeItemById}
                   setCartFixIssues={setCartFixIssues}
                   totalPrice={totalPrice}
-                  isCartEmpty={!cart.length}
+                  isCartEmpty={!cart.length && !placeOrder}
                   isSuccess={orderData && orderPlaced}
                 />
               </motion.div>
@@ -234,7 +237,11 @@ export default function Checkout({ onClose }: Props) {
           </AnimatePresence>
         </div>
       )}
-      <Button disabled={disabledNextAction()} onClick={nextAction} className="mt-auto bg-accent mb-20">
+      <Button
+        disabled={disabledNextAction()}
+        onClick={nextAction}
+        className="mt-auto max-sm:mb-20 bg-accent sm:mb-5 mx-auto"
+      >
         {buttonText}
       </Button>
     </Modal>

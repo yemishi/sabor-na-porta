@@ -15,8 +15,8 @@ interface PropsType {
 export default function MethodPicker({ totalPrice, method, setMethod, changeAmount, setChangeAmount }: PropsType) {
   const methods = [
     { label: "Pix", icon: pixSvg },
-    { label: "Card", icon: cardSvg },
-    { label: "Cash on Delivery", icon: coinSvg },
+    { label: "Cartão", icon: cardSvg },
+    { label: "Dinheiro", icon: coinSvg },
   ];
   return (
     <div className="space-y-4">
@@ -39,7 +39,7 @@ export default function MethodPicker({ totalPrice, method, setMethod, changeAmou
         );
       })}
 
-      {method === "Cash on Delivery" && (
+      {method === "Dinheiro" && (
         <div className="mt-2  flex flex-col gap-1 transition-opacity animate-in fade-in duration-300">
           {Number(changeAmount) > 0 && Number(changeAmount) < totalPrice && (
             <span>

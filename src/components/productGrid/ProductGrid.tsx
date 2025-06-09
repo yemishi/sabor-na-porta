@@ -34,11 +34,19 @@ export default function ProductGrid({ products }: Props) {
 
   return Object.entries(groupedByCategory).map(([category, items]) => (
     <section key={category} className="mb-10">
-      <h2 className="text-xl font-bold mb-4 text-primary">{category}</h2>
-      <div className="max-[385]:grid max-[385]:grid-cols-2 flex flex-wrap  gap-4">
+      <h2 className="title">{category}</h2>
+      <div
+        className="flex md:py-2 flex-wrap md:flex-col gap-x-4 gap-y-15 md:gap-y-4
+      md:bg-dark md:text-white md:p-4 md:rounded-xl md:border md:border-white/30"
+      >
         {items.map((item, i) => {
           return (
-            <ProductCard key={`${item.id}-${item.variant.id}-${i}`} variant={item.variant} product={{ ...item }} />
+            <ProductCard
+              className={i > 0 ? "md:border-b-0 md:border-x-0 md:border-t md:border-white/50" : "md:border-none"}
+              key={`${item.id}-${item.variant.id}-${i}`}
+              variant={item.variant}
+              product={{ ...item }}
+            />
           );
         })}
       </div>

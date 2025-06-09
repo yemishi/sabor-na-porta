@@ -2,13 +2,15 @@
 
 import { formatBRL } from "@/helpers";
 import { Button } from "@/ui";
-import { CreatedOrder } from "../hooks/useCheckout";
+
+import { formatOrderMessage, generateWppUrl } from "@/lib/sendWppMsg";
+import { Order } from "@/types";
 
 type Props = {
   method: string;
   removeItemById: (id: string) => void;
   totalPrice: number;
-  order: CreatedOrder;
+  order: Order;
   orderStatus: "idle" | "error" | "pending" | "success";
   orderRefetch: () => void;
   status: "idle" | "fix-needed";
@@ -97,6 +99,7 @@ export default function PlaceOrderStep({
     );
   }
 
+  const wppUrl = generateWppUrl("");
   if (isSuccess) {
     return (
       <div className="max-w-md mx-auto text-center p-6">
@@ -112,7 +115,7 @@ export default function PlaceOrderStep({
               <h3 className="font-semibold mb-2">🔑 Chave Pix para pagamento</h3>
               <div className="flex items-center justify-between border border-dashed rounded p-2 mb-2 bg-white">
                 <span>
-                  <strong>Celular:</strong> (83) 99364-3672
+                  <strong>Celular:</strong> {process.env.NEXT_PUBLIC_CONTACT_PHONE}
                 </span>
                 <button className="bg-black text-white px-2 py-1 rounded text-sm" onClick={handleCopyPix}>
                   COPIAR
@@ -122,22 +125,21 @@ export default function PlaceOrderStep({
                 <strong>Total a pagar:</strong> {formatBRL(totalPrice)}
               </p>
               <p className="mb-1">
-                <strong>Favorecido:</strong> Ze da silva ze
+                <strong>Favorecido:</strong> {process.env.NEXT_PUBLIC_PIX_BENEFICIARY_NAME}
               </p>
-              <p className="text-sm text-gray-600">BANCO DO BRASIL — Enviar comprovante para confirmação do pedido</p>
+              <p className="text-sm text-gray-600">{process.env.NEXT_PUBLIC_PIX_BANK_INFO}</p>
             </div>
           </>
         )}
 
         <div className="flex flex-col gap-3">
-          {method === "pix" && (
-            <button
-              onClick={() => window.open("https://wa.me/5583993643672", "_blank")}
-              className="border border-black py-2 rounded hover:bg-black hover:text-white transition"
-            >
-              📎 ENVIAR COMPROVANTE
-            </button>
-          )}
+          <button
+            onClick={() => window.open(generateWppUrl(formatOrderMessage(order)), "_blank")}
+            className="border border-black py-2 rounded hover:bg-black hover:text-white transition"
+          >
+            {order.paymentMethod.toLowerCase() === "pix" ? "📎 ENVIAR COMPROVANTE" : "📦 ACOMPANHE O PEDIDO"}
+          </button>
+
           <Button disabled={!order} onClick={trackOrder} className="bg-black text-white py-2 rounded">
             VER PEDIDO
           </Button>

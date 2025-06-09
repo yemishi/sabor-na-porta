@@ -3,7 +3,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #fef7ec;
+  --color-background: #f5ebdc;
   --color-primary: #b54127;
   --color-secondary: #e5b645;
   --color-dark: #3e1f0d;
@@ -14,10 +14,11 @@
 
   --font-title: "Lilita One", sans-serif;
   --font-primary: "Fredoka", sans-serif;
+  --animate-dropDown: dropDown 0.2s ease-in-out;
 }
 
 body {
-  background: #fef7ec;
+  background: #f5ebdc;
   color: #3e1f0d;
 
   font-family: "Fredoka", sans-serif;
@@ -25,4 +26,27 @@ body {
 
 .modal-container {
   @apply w-screen h-screen overflow-x-hidden overflow-y-clip max-w-3xl md:h-[900px] md:rounded-lg mx-auto my-auto bg-background p-4;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes dropDown {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.title {
+  @apply text-2xl font-bold text-primary mb-6 ;
 }

@@ -1,4 +1,6 @@
 import { db } from "@/lib/db";
+import { hashSync } from "bcrypt";
+import { hash } from "crypto";
 import { NextResponse } from "next/server";
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -30,12 +32,15 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
+
+    const hashed = hashSync(body.password, 10);
+
     await db.user.update({
       where: { id },
       data: {
         name: body.name || user.name,
         phone: body.phone || user.phone,
-        password: body.password || user.password,
+        password: body.password ? hashed : user.password,
         isAdmin: body.isAdmin || user.isAdmin,
         address: body.address || user.address,
       },

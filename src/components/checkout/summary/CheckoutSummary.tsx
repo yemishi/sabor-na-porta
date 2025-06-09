@@ -12,40 +12,43 @@ export default function CheckoutSummary({
   method: string;
 }) {
   return (
-    <>
-      <div className="flex font-bold  mt-3 md:self-center md:gap-10 md:text-lg lg:text-xl w-full ">
+    <div className="w-full">
+      <div className="flex font-bold mt-3 md:self-center md:gap-10 md:text-lg lg:text-xl w-full px-2 md:px-4">
         <span>{method}</span>
-        <span className="ml-auto text-primary">{formatBRL(totalPrice)}</span>
+        <div className="flex ml-auto">
+          <span className="ml-auto text-primary">{formatBRL(totalPrice)}</span>
+          {totalPrice < 10 && (
+            <span className="ml-1 text-xs text-red-500 font-normal absolute top-0 right-0">+ R$ 2,00 frete</span>
+          )}
+        </div>
       </div>
 
-      <div className="max-h-[500px] overflow-y-auto w-full">
-        <table className="flex items-center justify-center w-full  ">
-          <tbody className="flex flex-col gap-5 pt-4 w-full rounded  md:grid md:grid-cols-2 ">
-            {cart.map((product, index) => {
-              const { qtd, picture, name, priceTotal } = product;
-              return (
-                <tr
-                  key={`${name}_${index}`}
-                  className=" flex md:flex-col gap-5 pr-2 
-              w-full border-b border-primary-200 bg-primary-550 border lg:text-lg rounded-lg p-2"
-                >
-                  <td className="flex bg-cream rounded-lg items-center p-2 md:max-w-full  justify-center min-w-[40%] max-w-[40%]">
-                    <Image className="h-36 object-contain lg:h-44" src={picture} />
-                  </td>
+      <div className="max-h-[500px] overflow-y-auto w-full mt-4 px-2 md:px-4">
+        <div className="flex flex-col gap-4">
+          {cart.map((product, index) => {
+            const { qtd, picture, name, priceTotal } = product;
+            return (
+              <div
+                key={`${name}_${index}`}
+                className="flex flex-col md:flex-row items-center gap-4 p-4 border border-primary-200 bg-primary-550 rounded-xl shadow-sm"
+              >
+                <div className="w-full md:w-40 flex-shrink-0 flex items-center justify-center bg-cream rounded-lg p-2">
+                  <Image className="h-36 object-contain lg:h-44" src={picture} />
+                </div>
 
-                  <td>
-                    <div className="flex flex-col h-full gap-2 font-anton overflow-hidden py-3 ">
-                      <span className="font-semibold mr-5">{name}</span>
-                      <span className="font-bold text-secondary-500 mt-auto">{formatBRL(priceTotal)}</span>
-                      <span className="">Qtd: {qtd}</span>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                <div className="flex flex-col w-full h-full justify-between">
+                  <span className="font-semibold text-lg lg:text-xl">{name}</span>
+
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-sm text-muted">Qtd: {qtd}</span>
+                    <span className="font-bold text-secondary-500 text-base lg:text-lg">{formatBRL(priceTotal)}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </>
+    </div>
   );
 }
