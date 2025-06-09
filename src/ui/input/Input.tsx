@@ -31,7 +31,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     >
       <label
         htmlFor={id || rest.name}
-        className={`absolute left-4  bottom-2.5 origin-left transition-all opacity-50  ${
+        className={`absolute left-4  bottom-2.5 origin-left transition-all text-dark/50  ${
           hasValue
             ? `px-2 -translate-y-6 scale-90 translate-x-1.5 ${bgColor ?? "bg-background"}`
             : "pointer-events-none"

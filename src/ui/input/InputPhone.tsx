@@ -9,6 +9,7 @@ interface InputPhoneProps {
   name: string;
   disabled?: boolean;
   error?: string;
+  autoFocus?: boolean;
 }
 
 const formatPhone = (value: string) => {
