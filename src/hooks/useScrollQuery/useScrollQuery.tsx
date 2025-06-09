@@ -12,9 +12,10 @@ type PropsType<T> = {
   url: string;
   queryKey: string[];
   stop?: boolean;
+  enabled?: boolean;
 };
 
-export default function useScrollQuery<T>({ queryKey, url, stop }: PropsType<T>) {
+export default function useScrollQuery<T>({ queryKey, url, stop, enabled = true }: PropsType<T>) {
   const ref = useRef<HTMLDivElement>(null);
   const observer = useRef<IntersectionObserver | null>(null);
 
@@ -23,11 +24,12 @@ export default function useScrollQuery<T>({ queryKey, url, stop }: PropsType<T>)
     const res = await fetch(`${url}${mark}page=${page - 1}`);
     const json = await res.json();
     if (!res.ok) throw new Error(json.message);
-
     return json;
   };
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, ...rest } = useInfiniteQuery<PageResponse<T>>({
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, ...rest } = useInfiniteQuery<
+    PageResponse<T>
+  >({
     queryKey: [...queryKey, "infinite"],
     queryFn: ({ pageParam }) => fetchData(pageParam as number),
     getNextPageParam: (lastPage, allPages) => {
@@ -35,6 +37,7 @@ export default function useScrollQuery<T>({ queryKey, url, stop }: PropsType<T>)
     },
     initialPageParam: 1,
     refetchOnWindowFocus: false,
+    enabled,
   });
 
   const values = useMemo(() => {
@@ -46,20 +49,27 @@ export default function useScrollQuery<T>({ queryKey, url, stop }: PropsType<T>)
       return Array.isArray(list) ? list : [];
     });
   }, [data]) as T[];
-
   useEffect(() => {
-    if (!ref.current || observer.current || !hasNextPage || rest.isLoading) return;
+    if (!ref.current) return;
+
+    const el = ref.current;
+
+    if (observer.current) {
+      observer.current.disconnect();
+    }
 
     observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && !isFetchingNextPage) {
+      if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
         fetchNextPage();
       }
     });
 
-    observer.current.observe(ref.current);
+    observer.current.observe(el);
 
-    return () => observer.current?.disconnect();
-  }, [ref.current, isFetchingNextPage, hasNextPage]);
+    return () => {
+      observer.current?.disconnect();
+    };
+  }, [ref.current, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return {
     ref,
@@ -67,6 +77,7 @@ export default function useScrollQuery<T>({ queryKey, url, stop }: PropsType<T>)
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isLoading,
     ...rest,
   };
 }
