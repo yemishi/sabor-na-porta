@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  phone     String
+  phone     String   @unique
   name      String
   address   Address?
   isAdmin   Boolean?
@@ -29,17 +29,27 @@ model product {
   createdAt  DateTime         @default(now())
 }
 
+model StoreSchedule {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  day       Int      @unique
+  openTime  String
+  closeTime String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Order {
-  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
   orderId       String
   address       Address
   user          OrderUser
   price         Float
+  status        String         @default("pending")
   products      OrderProduct[]
   paymentMethod String
   shippingFee   Float?
   changeAmount  Float?
-  createdAt     DateTime     @default(now())
+  createdAt     DateTime       @default(now())
 }
 
 type OrderUser {
@@ -51,8 +61,10 @@ type OrderUser {
 type OrderProduct {
   id      String
   picture String
+  qtd     Int
   name    String
   price   Float
+  obs     String?
   addons  String[]
 }
 
