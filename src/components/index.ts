@@ -10,3 +10,5 @@ export { default as Cart } from "./cart/Cart";
 
 export { default as Login } from "./login/Login";
 export { default as Checkout } from "./checkout/Checkout";
+export { default as StoreStatusBanner } from "./storeStatusBanner/StoreStatusBanner";
+export { default as UserMenu } from "./userMenu/UserMenu";
