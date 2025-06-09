@@ -84,7 +84,7 @@ const useCart = ({ product, variant }: Props) => {
     });
   };
 
-  const getCartTotalPrice = () => cart.reduce((total, item) => total + item.priceTotal, 0);
+  const getCartTotalPrice = () => cart.reduce((total, item) => total + item.priceTotal * item.qtd, 0);
   const getQuantity = (variantToCheck: ProductVariant, addons: AddOn[] = []) => {
     if (!product || !variantToCheck) return 0;
 
