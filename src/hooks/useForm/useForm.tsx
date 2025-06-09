@@ -35,12 +35,12 @@ export default function useForm<T>(initialValues: FormFields) {
     const len = isString ? rawValue.length : String(rawValue).length;
 
     if (max && len > max!)
-      return maxMessage || (isNumberField ? `Must be ${max} or less` : `Must be ${max} characters or fewer`);
+      return maxMessage || (isNumberField ? `Precisa ser ${max} ou menos` : `Precisa ter no maximo ${max} characters`);
     if (min && len < min)
-      return minMessage || (isNumberField ? `Must be at least ${min}` : `Must be at least ${min} characters long`);
+      return minMessage || (isNumberField ? `Precisa ser no minimo ${min}` : `Precisa ter no minimo ${min} characters`);
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (isEmail && !emailRegex.test(String(value))) return "Invalid email format.";
+    if (isEmail && !emailRegex.test(String(value))) return "Email invalido.";
 
     if (validate && !Array.isArray(value)) return validate(value);
 
@@ -48,7 +48,7 @@ export default function useForm<T>(initialValues: FormFields) {
       if (!fields[compareField]) throw new Error(`Field ${compareField} doesn't exist in the form schema.`);
 
       const fieldToCompare = fields[compareField];
-      if (fieldToCompare.value !== value) return `Must be equal to ${compareField}`;
+      if (fieldToCompare.value !== value) return `Precisa ser igual ao campo ${compareField}`;
     }
 
     return null;
