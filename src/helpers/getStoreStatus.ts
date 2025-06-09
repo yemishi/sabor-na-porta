@@ -12,10 +12,6 @@ export default function getStoreStatus(schedules: Schedule[]): {
   open: boolean;
   message: string;
 } {
-    return {
-    open: false,
-    message: "Horário de funcionamento indisponível",
-  };/* 
   const now = new Date();
   const today = now.getDay();
   const currentTime = now.toTimeString().slice(0, 5);
@@ -71,5 +67,5 @@ export default function getStoreStatus(schedules: Schedule[]): {
   return {
     open: false,
     message: "Horário de funcionamento indisponível",
-  }; */
+  };
 }

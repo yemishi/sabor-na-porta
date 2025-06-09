@@ -13,7 +13,7 @@ export default function Page() {
   const { data: allProductsData, isLoading: loadingAll } = useQuery({
     queryKey: ["all-products"],
     queryFn: async () => {
-      const res = await fetch("/api/products?highlights=true");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products?highlights=true`);
       return res.json();
     },
   });
