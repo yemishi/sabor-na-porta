@@ -40,9 +40,9 @@ export default function Image({ priority, src, alt, ...props }: ImgProps) {
   if (!imgSrc) {
     return (
       <div
-        className={clsMerge(className, "bg-gray-100 text-sm text-gray-400 p-4 rounded-md self-center justify-center")}
+        className={clsMerge(className, "bg-background text-sm text-center text-gray-400  p-4 rounded-md self-center justify-center")}
       >
-        Imagem inválida
+        Imagem indisponível
       </div>
     );
   }
