@@ -13,7 +13,7 @@ export default function Page() {
   const { data: allProductsData, isLoading: loadingAll } = useQuery({
     queryKey: ["all-products"],
     queryFn: async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products?highlights=true`);
+      const res = await fetch("/api/products?highlights=true");
       return res.json();
     },
   });
@@ -28,7 +28,7 @@ export default function Page() {
     error,
     values: products,
   } = useScrollQuery<Product>({
-    url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/products?category=${category}&highlights=true`,
+    url: `/api/products?category=${category}&highlights=true`,
     queryKey: ["products", category],
   });
 
