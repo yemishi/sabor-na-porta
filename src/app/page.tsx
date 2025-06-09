@@ -28,7 +28,7 @@ export default function Page() {
     error,
     values: products,
   } = useScrollQuery<Product>({
-    url: `/api/products?category=${category}&highlights=true`,
+    url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/products?category=${category}&highlights=true`,
     queryKey: ["products", category],
   });
 
