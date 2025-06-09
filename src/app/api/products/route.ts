@@ -22,14 +22,14 @@ export async function GET(req: NextRequest) {
 
     const [products, count] = await Promise.all([
       db.product.findMany({
-        take: skip + take,
+        take,
+        skip,
         where: {
           AND: filters,
         },
       }),
-      db.product.count(),
+      db.product.count({ where: { AND: filters } }),
     ]);
-
     return NextResponse.json({ products, hasMore: count > take * (page + 1) });
   } catch (error) {
     console.error("Failed to fetch product:", error);
