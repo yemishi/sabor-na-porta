@@ -7,6 +7,7 @@ export async function GET(req: NextRequest) {
   const q = req.nextUrl.searchParams.get("q") || "";
   const highlights = req.nextUrl.searchParams.get("highlights");
   const category = req.nextUrl.searchParams.get("category") || "";
+  console.log("vercel deploy test");
   try {
     const skip = page * take;
     const filters = [{ name: { contains: q, mode: "insensitive" } }] as any;
