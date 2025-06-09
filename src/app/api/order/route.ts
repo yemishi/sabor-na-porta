@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sendWhatsAppMessage } from "@/lib/sendWppMsg";
+import emailjs from "@emailjs/browser";
+import { formatOrderEmail } from "@/lib/sendEmail";
 
 export async function POST(req: Request) {
   try {
@@ -69,15 +71,16 @@ export async function POST(req: Request) {
         picture: item.picture,
         name: item.name,
         price: itemTotal,
+        qtd: item.qtd,
+        obs: item.obs,
         addons: item.addons?.map((a: { name: string }) => a.name) || [],
       });
     }
 
     totalFromServer += shippingFee;
 
-    const orderId = "PED-" + Math.floor(100000 + Math.random() * 900000);
-
-    const createdOrder = await db.order.create({
+    const orderId = `${Math.floor(100000 + Math.random() * 900000)}`;
+    const newOrder = await db.order.create({
       data: {
         orderId,
         address: { set: address },
@@ -107,10 +110,11 @@ export async function POST(req: Request) {
         },
       });
     }
-/*     await sendWhatsAppMessage({
+
+    /*     await sendWhatsAppMessage({
       phone: user.phone,
       message: `testando wpp api raaaaaah` }); */
-    return NextResponse.json({ orderId: createdOrder.id }, { status: 201 });
+    return NextResponse.json({ order: newOrder }, { status: 201 });
   } catch (error) {
     console.error("We had an error trying to create the order.", error);
     return NextResponse.json({ message: "Erro interno ao processar o pedido." }, { status: 500 });
