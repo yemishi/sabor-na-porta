@@ -13,12 +13,11 @@ export default function Page() {
   const { data: allProductsData, isLoading: loadingAll } = useQuery({
     queryKey: ["all-products"],
     queryFn: async () => {
-      const res = await fetch("/api/products?highlights=true");
+      const res = await fetch("/api/products?highlights=true&getAll=true");
       return res.json();
     },
   });
   const allProducts = allProductsData?.products ?? [];
-
   const {
     isLoading,
     isFetchingNextPage,
@@ -31,7 +30,6 @@ export default function Page() {
     url: `/api/products?category=${category}&highlights=true`,
     queryKey: ["products", category],
   });
-
   const categories = useMemo(() => {
     if (loadingAll) return [];
 
