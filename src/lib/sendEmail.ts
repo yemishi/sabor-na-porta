@@ -21,7 +21,7 @@ export function formatOrderEmail(order: Order): { order_html: string; subject: s
     })
     .join("\n");
 
-  const fullAddressString = `${order.address.street} ${order.address.houseNumber}, ${order.address.neighborhood}, ${order.address.city}, ${order.address.cep}`;
+  const fullAddressString = `${order.address.street} ${order.address.houseNumber}, ${order.address.cep}`;
   const encodedMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddressString)}`;
 
   const order_html = `
@@ -31,9 +31,10 @@ export function formatOrderEmail(order: Order): { order_html: string; subject: s
 
 📦 Nº do Pedido: ${order.orderId}
 📅 Data: ${formattedDate}
-📍 Endereço: ${order.address.street}, ${order.address.houseNumber}, ${order.address.neighborhood} ${
-    order.address.complement
-  }
+📍 Endereço: ${order.address.street}
+🏯 Casa Numero: ${order.address.houseNumber}
+👯 Bairro: ${order.address.neighborhood} 
+➕ Complemento: ${order.address.complement}
 🗺️ Maps: ${encodedMapUrl}
 💳 Método de pagamento: ${order.paymentMethod}
 ${order.changeAmount ? `💰 Troco para: R$ ${order.changeAmount.toFixed(2)}` : ""}
@@ -44,7 +45,7 @@ ${productLines}
 🚚 Taxa de entrega: R$ ${(order.shippingFee ?? 0).toFixed(2)}
 💰 Total: R$ ${order.price.toFixed(2)}
 
-🔗 Ver pedido completo: ${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/orders?q=${order.orderId}
+🔗 Painel atalho: ${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/orders?q=${order.orderId}
 `.trim();
 
   const subject = `🧾 Pedido #${order.orderId} — R$ ${order.price.toFixed(2)} — ${formattedDate}`;
@@ -67,7 +68,7 @@ export function formatCanceledOrderEmail(order: Order): { order_html: string; su
     })
     .join("\n");
 
-  const fullAddressString = `${order.address.street} ${order.address.houseNumber}, ${order.address.neighborhood}, ${order.address.city}, ${order.address.cep}`;
+  const fullAddressString = `${order.address.street} ${order.address.houseNumber}, ${order.address.cep}`;
   const encodedMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddressString)}`;
 
   const order_html = `
@@ -78,9 +79,10 @@ export function formatCanceledOrderEmail(order: Order): { order_html: string; su
 
 📦 Nº do Pedido: ${order.orderId}
 📅 Data do pedido: ${formattedDate}
-📍 Endereço: ${order.address.street}, ${order.address.houseNumber}, ${order.address.neighborhood} ${
-    order.address.complement
-  }
+📍 Endereço: ${order.address.street}
+🏯 Casa Numero: ${order.address.houseNumber}
+👯 Bairro: ${order.address.neighborhood} 
+➕ Complemento: ${order.address.complement}
 🗺️ Maps: ${encodedMapUrl}
 💳 Método de pagamento: ${order.paymentMethod}
 ${order.changeAmount ? `💰 Troco para: R$ ${order.changeAmount.toFixed(2)}` : ""}
