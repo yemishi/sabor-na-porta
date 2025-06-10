@@ -37,22 +37,25 @@ export default function ProductCard({ product, variant, ...props }: Props) {
 
       <Image
         src={product.picture}
-        className=" w-full absolute -top-5 md:static h-38 object-cover hover:scale-105 transition md:w-48 md:h-full rounded-xl"
+        className=" w-full absolute -top-5 md:static h-38 object-contain hover:scale-105 transition md:w-48 md:h-full rounded-xl"
       />
 
-      <div className="flex flex-col pt-10 mt-auto justify-between p-3 bg-card rounded-xl md:rotate-none md:bg-transparent md:p-2 w-full">
-        <div className="flex flex-col gap-2">
+      <div className="flex flex-col pt-10 mt-auto  justify-between p-3 bg-card rounded-xl md:rotate-none md:bg-transparent md:mt-0  md:p-2 w-full">
+        <div className="flex flex-col gap-2 md:my-auto ">
           <div className="flex flex-col md:flex-row md:items-center md:gap-2">
-            <span className="text-lg md:text-xl lg:text-2xl font-semibold capitalize line-clamp-2">{product.name}</span>
+            <span className="text-lg md:text-xl lg:text-2xl font-semibold capitalize line-clamp-1 md:line-clamp-2">
+              {product.name}
+            </span>
+
             <span className="text-base md:text-xl lg:text-2xl text-primary md:text-secondary font-medium md:font-semibold capitalize line-clamp-1">
               {variant.name}
             </span>
           </div>
-          <span className="text-sm md:text-base text-muted-foreground line-clamp-2 md:text-muted">{variant.desc}</span>
+          <span className="text-sm sm:text-base md:text-lg line-clamp-1 md:line-clamp-2">{variant.desc}</span>
         </div>
 
         <div className="flex justify-between items-center mt-2 md:mt-2">
-          <div className="flex-col text-primary md:text-accent font-semibold hidden md:flex md:text-lg text-base">
+          <div className="flex-col text-primary  font-semibold hidden md:flex md:text-xl sm:text-secondary sm:text-lg text-base">
             <span>{formatBRL(variant.promotion || variant.price)}</span>
             {variant.promotion && <span className="text-sm text-muted line-through">{formatBRL(variant.price)}</span>}
           </div>
@@ -69,7 +72,7 @@ export default function ProductCard({ product, variant, ...props }: Props) {
         </div>
 
         {!isOutOfStock && (
-          <div className="md:hidden flex gap-1 font-semibold absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-primary px-2 py-1 rounded-full">
+          <div className="md:hidden flex gap-1 font-semibold absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-primary px-2 py-1 rounded-full ">
             <span className="text-white">{formatBRL(variant.promotion || variant.price)}</span>
             {variant.promotion && (
               <span className="text-xs line-through text-accent absolute -right-13">{formatBRL(variant.price)}</span>
