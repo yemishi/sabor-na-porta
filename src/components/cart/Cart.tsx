@@ -148,7 +148,7 @@ export default function Cart() {
 
           <Button
             onClick={() => setIsCheckout(true)}
-            disabled={!cart.length || scheduleError || scheduleLoading || !isStoreOpen}
+            /*    disabled={!cart.length || scheduleError || scheduleLoading || !isStoreOpen} */
             className="mt-auto md:rounded-b-lg scale-100"
           >
             {buttonText}

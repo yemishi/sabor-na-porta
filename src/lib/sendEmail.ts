@@ -92,7 +92,7 @@ ${productLines}
 💰 Total: R$ ${order.price.toFixed(2)}
 
 📄 Status: Cancelado
-🔗 Ver detalhes do pedido: ${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/orders?q=${order.orderId}
+🔗 Va para o painle: ${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/orders?q=${order.orderId}
 `.trim();
 
   const subject = `❌ Pedido CANCELADO #${order.orderId} — R$ ${order.price.toFixed(2)} — ${formattedDate}`;

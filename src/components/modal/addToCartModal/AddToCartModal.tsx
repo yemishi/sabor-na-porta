@@ -64,7 +64,7 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
       priceTotal: variant.promotion ?? variant.price,
     };
     addItem(cartProduct);
-    onClose();
+ /*    onClose(); */
   };
 
   return (
