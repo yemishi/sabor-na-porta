@@ -32,7 +32,7 @@ export default function CheckoutSummary({
                 key={`${name}_${index}`}
                 className="flex flex-col md:flex-row items-center gap-4 p-4 border border-primary-200 bg-primary-550 rounded-xl shadow-sm"
               >
-                <div className="w-full md:w-40 flex-shrink-0 flex items-center justify-center bg-cream rounded-lg p-2">
+                <div className="w-full md:w-40 flex-shrink-0 flex items-center justify-center p-2">
                   <Image className="h-36 object-contain lg:h-44" src={picture} />
                 </div>
 
@@ -40,7 +40,7 @@ export default function CheckoutSummary({
                   <span className="font-semibold text-lg lg:text-xl">{name}</span>
 
                   <div className="flex items-center justify-between mt-2">
-                    <span className="text-sm text-muted">Qtd: {qtd}</span>
+                    <span className="text-sm md:text-base">Qtd: {qtd}</span>
                     <span className="font-bold text-secondary-500 text-base lg:text-lg">{formatBRL(priceTotal)}</span>
                   </div>
                 </div>

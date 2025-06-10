@@ -79,7 +79,7 @@ export default function PlaceOrderStep({
       <div className="flex flex-col items-center justify-center py-12 space-y-4 text-center">
         <div className="text-6xl animate-spin">🍳</div>
         <p className="text-lg font-semibold"> Preparando seu pedido… Segure firme, a cozinha está a todo vapor!</p>
-        <p className="text-sm text-accent ">
+        <p className="text-sm md:text-base ">
           <span className="italic"> Enquanto isso, já pensa no próximo prato.</span> 😋
         </p>
       </div>

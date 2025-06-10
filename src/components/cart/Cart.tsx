@@ -100,9 +100,9 @@ export default function Cart() {
           ) : (
             <>
               <div className="flex justify-between items-center px-2">
-                <span className="flex flex-col ">
+                <span className="flex flex-col">
                   <h2 className="text-2xl font-bold text-primary">Seu Carrinho</h2>
-                  <span className="text-xl font-bold text-secondary ml-">Total: {formatBRL(getCartTotalPrice())}</span>
+                  <span className="text-xl font-bold">Total: {formatBRL(getCartTotalPrice())}</span>
 
                   {!(getCartTotalPrice() >= 10) && (
                     <span className="text-sm text-muted">+ R$2 de frete (grátis a partir de R$10)</span>
@@ -125,7 +125,7 @@ export default function Cart() {
                     <Image src={item.picture} className="object-cover size-22 rounded-md" alt={item.name} />
 
                     <div className="flex flex-col justify-between ml-5">
-                      <p className="text-sm text-primary md:text-dark font-medium md:text-lg">{item.name}</p>
+                      <p className="text-base text-primary md:text-dark font-medium md:text-lg">{item.name}</p>
 
                       {item.addons && item.addons?.length > 0 && (
                         <p className="text-sm text-accent">Extras: {item.addons.map((a) => a.name).join(", ")}</p>
@@ -134,7 +134,7 @@ export default function Cart() {
                       {item.obs && <p className="text-sm italic text-dark line-clamp-2 ">Obs: {item.obs}</p>}
 
                       <span className="text-lg font-semibold text-primary">{formatBRL(item.priceTotal)}</span>
-                      <p className="text-sm font-semibold text-muted">Qtd: {item.qtd}</p>
+                      <p className="text-sm font-semibold">Qtd: {item.qtd}</p>
                     </div>
 
                     <Button className="mt-auto" onClick={() => removeItem(item)}>

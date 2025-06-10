@@ -64,7 +64,7 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
       priceTotal: variant.promotion ?? variant.price,
     };
     addItem(cartProduct);
- /*    onClose(); */
+    onClose();
   };
 
   return (
@@ -78,11 +78,19 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
         </button>
 
         <div className="flex items-center gap-4">
-          <Image src={product.picture} className="size-28 sm:size-32 rounded-md object-cover" />
-          <div className="flex flex-col">
-            <h2 className="text-xl sm:text-2xl font-bold text-dark">{product.name}</h2>
-            <span className="text-base text-primary">{variant.name}</span>
-            {variant.desc && <p className="text-sm sm:text-base text-primary">{variant.desc}</p>}
+          <Image src={product.picture} className="size-28 sm:size-32 md:size-36 rounded-md object-contain" />
+          <div className="flex flex-col h-full">
+            <div className="mb-auto md:mt-5">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-dark">
+                {product.name} {variant.name}
+              </h2>
+              {variant.desc && (
+                <p className="text-sm sm:text-base md:text-lg font-semibold text-primary">{variant.desc}</p>
+              )}
+            </div>
+            <p className="text-lg md:text-2xl font-semibold text-primary">
+              {formatBRL(variant.promotion ?? variant.price)}
+            </p>
           </div>
         </div>
 
@@ -111,12 +119,12 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
                     type="button"
                     onClick={() => toggleAddon(addon)}
                     className={`flex justify-between items-center p-3 rounded-lg border transition-all text-left
-          ${isSelected ? "bg-primary/10 border-primary text-primary" : "bg-white border-dark/20 text-dark"}
+          ${isSelected ? "bg-primary/10 border-primary text-primary" : "bg-card border-dark/20 text-dark"}
           hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary`}
                   >
                     <div className="flex flex-col">
                       <span className="font-medium md:text-lg">{addon.name}</span>
-                      <span className="text-sm text-secondary md:text-base md:text-dark">{formatBRL(addon.price)}</span>
+                      <span className="text-sm text-dark md:text-base">{formatBRL(addon.price)}</span>
                     </div>
                     <div
                       className={`size-5 rounded border border-dark/20 flex items-center justify-center ${
@@ -133,7 +141,7 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
         )}
 
         {qtdData > 0 && (
-          <div className="text-base">
+          <div className="text-base sm:text-lg">
             Você já tem <strong>{qtdData}</strong> {qtdData === 1 ? "unidade" : "unidades"} no carrinho.
           </div>
         )}
@@ -163,7 +171,7 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
         </div>
 
         <textarea
-          className={`w-full min-h-28 text-base outline-none bg-background border p-3 rounded-lg border-dark/40 transition ${
+          className={`w-full min-h-28 text-base md:text-lg md:min-h-36 outline-none bg-cream border p-3 rounded-lg border-dark/40 transition ${
             isLimit ? "opacity-40 pointer-events-none" : ""
           }`}
           placeholder="Observação?"
@@ -172,11 +180,11 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
         />
 
         <div className="flex justify-between items-center mt-auto">
-          <span className="font-bold text-xl text-primary">
+          <span className="font-bold text-xl text-primary md:text-2xl">
             {isOutOfStock ? "Sem estoque" : `Total: ${formatBRL(totalPrice)}`}
           </span>
           <Button
-            className="bg-primary text-white font-semibold px-5 py-3 rounded text-base disabled:opacity-50"
+            className="bg-primary text-white font-semibold px-5 py-3 rounded text-base md:text-lg disabled:opacity-50"
             disabled={!canAddToCart || isLimit}
             onClick={addToCart}
           >
