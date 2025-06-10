@@ -11,7 +11,15 @@ export async function POST(req: Request) {
 
     let totalFromServer = 0;
     const validatedProducts = [] as any;
-
+    if (!products.length) {
+      return NextResponse.json(
+        {
+          message: "Seu carrinho esta vazio mas validamos esse processo! (nao tente ver pedido)",
+          newOrder: { id: "" },
+        },
+        { status: 200 }
+      );
+    }
     for (const item of products) {
       const dbProduct = await db.product.findUnique({
         where: { id: item.id },
