@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["mongoDb"]
 }
 
 datasource db {
@@ -18,7 +19,7 @@ model User {
   createdAt DateTime @default(now())
 }
 
-model product {
+model Product {
   id         String           @id @default(auto()) @map("_id") @db.ObjectId
   name       String
   picture    String
