@@ -8,6 +8,7 @@ export default function Page() {
       const response = await data.json();
       console.log(response);
     };
+    fetchData();
   }, []);
   return <div>home page !!</div>;
 }

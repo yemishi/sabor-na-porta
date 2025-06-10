@@ -1,4 +1,10 @@
-"use client";
+
+export default function Page(){
+  return <div>
+    
+  </div>
+}
+/* "use client";
 
 import { Suspense, useEffect, useState } from "react";
 import { Button, Input, Loading } from "@/ui";
@@ -98,3 +104,4 @@ function SchedulePage() {
     </div>
   );
 }
+ */

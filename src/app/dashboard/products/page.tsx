@@ -1,4 +1,10 @@
-"use client";
+
+export default function Page(){
+  return <div>
+    
+  </div>
+}
+/* "use client";
 
 import { useState } from "react";
 import ProductForm from "./productForm/ProductForm";
@@ -131,3 +137,4 @@ export default function Page() {
     </div>
   );
 }
+ */
