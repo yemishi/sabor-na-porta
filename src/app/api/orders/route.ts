@@ -54,7 +54,6 @@ export async function GET(req: NextRequest) {
         where: { orderId: { contains: q, mode: "insensitive" }, status: { contains: status, mode: "insensitive" } },
       }),
     ]);
-    console.log("AAAAA");
 
     return NextResponse.json({ orders, hasMore: count > take * (page + 1) });
   } catch (error) {
