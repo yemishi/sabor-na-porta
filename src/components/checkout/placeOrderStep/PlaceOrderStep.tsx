@@ -46,9 +46,9 @@ export default function PlaceOrderStep({
       </div>
     );
   }
-
+  const pix = process.env.NEXT_PUBLIC_PIX_KEY || "";
   const handleCopyPix = () => {
-    navigator.clipboard.writeText("(83) 99364-3672");
+    navigator.clipboard.writeText(pix);
     alert("Chave Pix copiada! 📋");
   };
 
@@ -115,7 +115,7 @@ export default function PlaceOrderStep({
               <h3 className="font-semibold mb-2">🔑 Chave Pix para pagamento</h3>
               <div className="flex items-center justify-between border border-dashed rounded p-2 mb-2 bg-white">
                 <span>
-                  <strong>Celular:</strong> {process.env.NEXT_PUBLIC_CONTACT_PHONE}
+                  <strong>Celular:</strong> {pix}
                 </span>
                 <button className="bg-black text-white px-2 py-1 rounded text-sm" onClick={handleCopyPix}>
                   COPIAR

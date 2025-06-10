@@ -31,7 +31,9 @@ export function formatOrderEmail(order: Order): { order_html: string; subject: s
 
 📦 Nº do Pedido: ${order.orderId}
 📅 Data: ${formattedDate}
-📍 Endereço: ${order.address.street}, ${order.address.houseNumber}, ${order.address.neighborhood}
+📍 Endereço: ${order.address.street}, ${order.address.houseNumber}, ${order.address.neighborhood} ${
+    order.address.complement
+  }
 🗺️ Maps: ${encodedMapUrl}
 💳 Método de pagamento: ${order.paymentMethod}
 ${order.changeAmount ? `💰 Troco para: R$ ${order.changeAmount.toFixed(2)}` : ""}
@@ -76,7 +78,9 @@ export function formatCanceledOrderEmail(order: Order): { order_html: string; su
 
 📦 Nº do Pedido: ${order.orderId}
 📅 Data do pedido: ${formattedDate}
-📍 Endereço: ${order.address.street}, ${order.address.houseNumber}, ${order.address.neighborhood}
+📍 Endereço: ${order.address.street}, ${order.address.houseNumber}, ${order.address.neighborhood} ${
+    order.address.complement
+  }
 🗺️ Maps: ${encodedMapUrl}
 💳 Método de pagamento: ${order.paymentMethod}
 ${order.changeAmount ? `💰 Troco para: R$ ${order.changeAmount.toFixed(2)}` : ""}
