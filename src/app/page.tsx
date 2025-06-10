@@ -1,4 +1,20 @@
 "use client";
+import { useEffect } from "react";
+
+export default function Page() {
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetch("/api/products?highlights=true");
+      const response = await data.json();
+      console.log(response);
+    };
+  }, []);
+  return <div>home page !!</div>;
+}
+
+/* 
+
+"use client";
 
 import { ErrorWrapper, ProductGrid } from "@/components";
 import { useScrollQuery } from "@/hooks";
@@ -42,7 +58,23 @@ export default function Page() {
   if (isLoading) return <Loading isPage />;
   return (
     <div className="flex flex-col md:flex-row md:gap-6 p-4 md:p-6">
-    <CategoryPicker categories={categories as string[]} current={category} onChange={setCategory} />
+      <ErrorWrapper error={isError} message={error?.message}>
+        {loadingAll ? (
+          <Loading isPage={false} />
+        ) : (
+          <div className="md:w-[14rem] h-full flex-shrink-0 md:sticky md:mt-30 md:top-40 md:self-start">
+            <CategoryPicker categories={categories as string[]} current={category} onChange={setCategory} />
+          </div>
+        )}
+        <div className="flex flex-col gap-3 flex-1 p-4 md:p-0">
+          <ProductGrid products={products} />
+        </div>
+
+        {isFetchingNextPage && <Loading isPage={false} />}
+        {!isFetchingNextPage && hasNextPage && <div ref={ref} />}
+      </ErrorWrapper>
     </div>
   );
 }
+
+*/
