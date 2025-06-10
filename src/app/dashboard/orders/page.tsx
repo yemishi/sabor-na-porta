@@ -80,14 +80,34 @@ function DashboardOrdersPage() {
         {orders.map((order, i) => (
           <div key={`${order.id}_${i}`} className="border rounded-xl p-4 bg-card shadow-sm">
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-              <div className="flex-1">
-                <p className="font-semibold text-lg">Pedido #{order.orderId}</p>
-                <p className="text-sm mt-1">
+              <div className="flex-1 gap-1 flex flex-col md:text-lg">
+                <p className="font-semibold text-lg md:text-xl">Pedido #{order.orderId}</p>
+                <p>
                   {formatDate(order.createdAt)} — <strong>{formatBRL(order.price)}</strong>
                 </p>
-                <p className="text-sm mt-1">
-                  Cliente: {order.user.name} — {order.user.phone}
+                <p>
+                  Cliente:{" "}
+                  <span className="font-medium uppercase  md:text-xl ml-1">
+                    {order.user.name} — {order.user.phone}
+                  </span>
                 </p>
+
+                <div className="flex flex-col space-y-1 font-medium">
+                  <p>
+                    Endereço: <span className="text-primary uppercase  md:text-xl ml-1">{order.address.street}</span>,
+                    Nº <span className="text-primary uppercase  md:text-xl ml-1">{order.address.houseNumber}</span>
+                  </p>
+                  <p>
+                    Bairro:<span className="text-primary uppercase ml-1 ">{order.address.neighborhood}</span>
+                    {order.address.complement && (
+                      <>
+                        {" "}
+                        — Complemento:
+                        <span className="text-primary md:text-xl  uppercase ml-1">{order.address.complement}</span>
+                      </>
+                    )}
+                  </p>
+                </div>
               </div>
 
               <div className="flex flex-col sm:flex-row self-center sm:items-center gap-2 md:gap-4">
