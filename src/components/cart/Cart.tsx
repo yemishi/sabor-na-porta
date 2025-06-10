@@ -73,10 +73,13 @@ export default function Cart() {
       <button
         onClick={() => setIsCart(!isCart)}
         aria-label="Toggle cart"
-        className="flex items-center gap-2 cursor-pointer hover:brightness-110 md:bg-dark md:px-4 md:py-1 md:rounded-full"
+        className="flex items-center relative gap-2 cursor-pointer hover:brightness-110 md:bg-dark md:px-4 md:py-1 md:rounded-full"
       >
         <span className="hidden md:inline text-lg font-semibold text-white">{formatBRL(getCartTotalPrice())}</span>
         <Image src={bag} className="size-9 md:invert md:brightness-0" />
+        <span className="absolute md:hidden -bottom-1 right-0 bg-primary flex text-white justify-center items-center size-5 text-xs  rounded-full font-semibold">
+          <span>{cart.length}</span>
+        </span>
       </button>
       {isCart && (
         <div
