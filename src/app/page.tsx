@@ -1,21 +1,4 @@
 "use client";
-import { useEffect } from "react";
-
-export default function Page() {
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetch("/api/products?highlights=true");
-      const response = await data.json();
-      console.log(response);
-    };
-    fetchData();
-  }, []);
-  return <div>home page !!</div>;
-}
-
-/* 
-
-"use client";
 
 import { ErrorWrapper, ProductGrid } from "@/components";
 import { useScrollQuery } from "@/hooks";
@@ -77,5 +60,3 @@ export default function Page() {
     </div>
   );
 }
-
-*/

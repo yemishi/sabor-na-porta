@@ -1,17 +1,13 @@
-/* import DashboardHeader from "./DashboardHeader";
+import DashboardHeader from "./DashboardHeader";
 import { DashBoardProvider } from "./context/DashboardProvider";
- */
-export default async function Layout({ children }: { children: React.ReactNode }) {
 
-return <div>
-  
-</div>
-  /*   return (
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  return (
     <div>
       <DashBoardProvider>
-         <DashboardHeader /> 
+        <DashboardHeader />
         {children}
       </DashBoardProvider>
     </div>
-  ); */
+  );
 }

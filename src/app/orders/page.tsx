@@ -1,13 +1,6 @@
 "use client";
 
-
-export default function Page(){
-  return <div>
-    
-  </div>
-}
-
-/* import { Loading } from "@/ui";
+import { Loading } from "@/ui";
 import { formatBRL, formatDate } from "@/helpers";
 import { Order, OrderStatus, translateOrderStatus } from "@/types";
 import { useSession } from "next-auth/react";
@@ -124,4 +117,3 @@ export default function Page() {
     </div>
   );
 }
- */

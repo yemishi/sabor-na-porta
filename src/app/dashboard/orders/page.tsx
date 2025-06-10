@@ -1,15 +1,4 @@
-
-
-
-
-export default function Page(){
-  return <div>
-    
-  </div>
-}
-
-
-/* "use client";
+"use client";
 
 import { useScrollQuery } from "@/hooks";
 import { Order, OrderStatus, User, translateOrderStatus } from "@/types";
@@ -137,4 +126,3 @@ function DashboardOrdersPage() {
     </div>
   );
 }
- */

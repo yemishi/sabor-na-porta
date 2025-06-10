@@ -21,15 +21,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
- {/*      <Provider session={session}> */}
+      <Provider session={session}>
         <body className="min-h-screen flex flex-col overflow-x-hidden">
-{/*           <Header /> */}
-    {/*       <StoreStatusBanner /> */}
+          <Header />
+          <StoreStatusBanner />
           <main className="w-full min-h-full max-w-7xl mx-auto">{children}</main>
           <Footer />
           <div className="w-full" id="modal" />
         </body>
-{/*       </Provider> */}
+      </Provider>
     </html>
   );
 }
