@@ -19,6 +19,9 @@ export default function ProductCard({ product, variant, ...props }: Props) {
     <div
       className={`${className} relative flex flex-col md:flex-row gap-3 max-[480]:mx-auto max-[480]:w-full max-[480]:max-w-64 w-50 h-67 md:h-auto md:w-full border
        rounded-xl md:pt-3 md:rounded-none`}
+      onClick={() => {
+        if (!isOutOfStock) setModalProduct(product);
+      }}
       key={`${product.id}_${product.name}`}
     >
       {modalProduct && (
@@ -60,8 +63,6 @@ export default function ProductCard({ product, variant, ...props }: Props) {
           </div>
 
           <button
-            disabled={isOutOfStock}
-            onClick={() => setModalProduct(product)}
             className={`flex mx-auto md:mx-0 mb-2 md:mb-0 items-center justify-center gap-2 rounded-full px-3 py-1.5 md:px-4 md:py-2 transition-all 
                 font-medium bg-accent md:bg-secondary text-white hover:brightness-110`}
           >
