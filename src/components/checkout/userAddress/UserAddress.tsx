@@ -13,10 +13,10 @@ export default function UserAddress({ userInfo, toggleForm }: { userInfo: User; 
       <p>
         {address.cep} - {address.city}
       </p>
-      {address.complement && <p className="italic text-muted">{address.complement}</p>}
+      {address.complement && <p className="italic">{address.complement}</p>}
       <Button
         onClick={toggleForm}
-        className="flex items-center bg-accent mt-6 cursor-pointer gap-1 font-medium hover:underline"
+        className="flex items-center bg-primary mt-6 cursor-pointer gap-1 font-medium hover:underline"
       >
         Editar
       </Button>
