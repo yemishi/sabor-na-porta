@@ -35,10 +35,9 @@ export default function ProductCard({ product, variant, ...props }: Props) {
         </div>
       )}
 
-      <Image
-        src={product.picture}
-        className=" w-full absolute -top-5 md:static h-38 object-contain hover:scale-105 transition md:w-48 md:h-full rounded-xl"
-      />
+      <div className="w-full absolute -top-5 md:static h-38 object-contain hover:scale-105 transition md:w-52 md:h-36 md:bg-cream p-1 rounded-xl">
+        <Image src={product.picture} className=" object-contain size-full" />
+      </div>
 
       <div className="flex flex-col pt-10 mt-auto  justify-between p-3 bg-card rounded-xl md:rotate-none md:bg-transparent md:mt-0  md:p-2 w-full">
         <div className="flex flex-col gap-2 md:my-auto ">
