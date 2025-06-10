@@ -17,7 +17,7 @@ export default function ProductCard({ product, variant, ...props }: Props) {
   const isOutOfStock = !variant.stock;
   return (
     <div
-      className={`${className} relative flex flex-col md:flex-row gap-3 max-[400]:mx-auto max-[400]:w-52 min-[400]:w-44 min-[480]:w-52 h-67 md:h-auto md:w-full border
+      className={`${className} relative flex flex-col md:flex-row gap-3 max-[400]:mx-auto max-[400]:w-52 min-[400]:w-auto min-[480]:w-52 h-67 md:h-auto md:w-full border
        rounded-xl md:pt-3 md:rounded-none`}
       onClick={() => {
         if (!isOutOfStock) setModalProduct(product);

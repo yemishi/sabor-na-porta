@@ -37,7 +37,7 @@ export default function ProductGrid({ products }: Props) {
       <h2 className="title">{category}</h2>
       <div
         className="flex md:py-2 flex-wrap md:flex-col gap-x-2 gap-y-15 md:gap-y-4
-      md:bg-dark md:text-white md:p-4 md:rounded-xl md:border md:border-white/30"
+      md:bg-dark md:text-white md:p-4 md:rounded-xl md:border min-[400]:grid min-[400]:grid-cols-2 min-[500]:flex  md:border-white/30"
       >
         {items.map((item, i) => {
           return (
