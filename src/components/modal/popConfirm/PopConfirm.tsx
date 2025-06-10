@@ -16,9 +16,9 @@ export default function PopConfirm({
   onClose,
   error,
   confirm,
-  name = "isto",
+  name = " isto",
   isLoading,
-  confirmDesc = "Yah!",
+  confirmDesc = "SIM!",
 }: PropsType) {
   return (
     <Modal
@@ -35,7 +35,7 @@ export default function PopConfirm({
 
       <div className="grid grid-cols-2 gap-4">
         <Button disabled={isLoading} onClick={onClose} className="rounded-lg bg-accent text-gray-800">
-          Noh!
+          NÃO!
         </Button>
         <Button disabled={isLoading} onClick={confirm} className="rounded-lg bg-red-400 text-white ">
           {isLoading ? "Deletando..." : confirmDesc}
