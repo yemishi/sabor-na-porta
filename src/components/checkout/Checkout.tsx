@@ -240,7 +240,7 @@ export default function Checkout({ onClose }: Props) {
       <Button
         disabled={disabledNextAction()}
         onClick={nextAction}
-        className="mt-auto max-sm:mb-20 bg-accent sm:mb-5 mx-auto"
+        className="mt-auto max-sm:mb-20 bg-dark sm:mb-5 mx-auto"
       >
         {buttonText}
       </Button>

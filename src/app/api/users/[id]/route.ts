@@ -33,7 +33,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    const hashed = hashSync(body.password, 10);
+    const hashed = hashSync(body.password||"", 10);
 
     await db.user.update({
       where: { id },

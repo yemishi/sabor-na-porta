@@ -104,7 +104,7 @@ export default function UserAddressForm({ userInfo, refetch, onClose }: Props) {
 
       <button
         type="submit"
-        className="bg-primary mx-auto cursor-pointer rounded-lg text-white px-4 py-2 hover:brightness-110 transition-all text-sm font-semibold"
+        className="bg-secondary mx-auto cursor-pointer rounded-lg text-white px-4 py-2 hover:brightness-110 transition-all text-sm font-semibold"
       >
         Salvar endereço
       </button>

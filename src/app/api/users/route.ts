@@ -12,6 +12,7 @@ export async function GET(req: NextRequest) {
         where: { phone },
         select: { address: true, phone: true, id: true, isAdmin: true, name: true },
       });
+
       if (!user) return NextResponse.json({ message: "User not found." }, { status: 404 });
       return NextResponse.json({ message: "User found successfully", user }, { status: 200 });
     }

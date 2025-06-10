@@ -44,7 +44,7 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
     if (found) {
       setVariant(found);
       setSelectedAddons([]);
-      setQuantity(getQuantity(found, []));
+      setQuantity(!isLimit && variant.stock > 0 ? 1 : 0);
     }
   };
   const isOutOfStock = variant.stock === 0;
