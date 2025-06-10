@@ -56,6 +56,7 @@ export const formatOrderMessage = (order: Order) => {
   const deliveryAddress = `
 🛵   Endereço de entrega
 Rua: ${address.street} ${address.houseNumber}
+${order.address.ref ? `Ponto de referencia: ${order.address.ref}` : ""}
 Complemento: ${address.complement ?? "-"}
 Bairro: ${address.neighborhood}
 Cep: ${address.cep}

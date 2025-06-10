@@ -13,4 +13,5 @@ export type Address = {
   city: string;
   cep: string;
   complement?: string;
+  ref?: string;
 };

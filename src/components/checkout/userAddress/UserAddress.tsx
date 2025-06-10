@@ -13,7 +13,8 @@ export default function UserAddress({ userInfo, toggleForm }: { userInfo: User; 
       <p>
         {address.cep} - {address.city}
       </p>
-      {address.complement && <p className="italic">{address.complement}</p>}
+      {address.complement && <p>{address.complement}</p>}
+      {address.ref && <p className="italic">{address.ref}</p>}
       <Button
         onClick={toggleForm}
         className="flex items-center bg-primary mt-6 cursor-pointer gap-1 font-medium hover:underline"

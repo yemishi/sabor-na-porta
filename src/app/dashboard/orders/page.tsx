@@ -107,6 +107,12 @@ function DashboardOrdersPage() {
                       </>
                     )}
                   </p>
+
+                  {order.address.ref && (
+                    <p>
+                      Ponto de referencia:<span className="text-primary uppercase ml-1 ">{order.address.ref}</span>
+                    </p>
+                  )}
                 </div>
               </div>
 

@@ -32,6 +32,7 @@ export function formatOrderEmail(order: Order): { order_html: string; subject: s
 📦 Nº do Pedido: ${order.orderId}
 📅 Data: ${formattedDate}
 📍 Endereço: ${order.address.street}
+${order.address.ref ? `🐼 Ponto de referencia: ${order.address.ref}` : ""}
 🏯 Casa Numero: ${order.address.houseNumber}
 👯 Bairro: ${order.address.neighborhood} 
 ➕ Complemento: ${order.address.complement}
@@ -80,6 +81,7 @@ export function formatCanceledOrderEmail(order: Order): { order_html: string; su
 📦 Nº do Pedido: ${order.orderId}
 📅 Data do pedido: ${formattedDate}
 📍 Endereço: ${order.address.street}
+${order.address.ref ? `🐼 Ponto de referencia: ${order.address.ref}` : ""}
 🏯 Casa Numero: ${order.address.houseNumber}
 👯 Bairro: ${order.address.neighborhood} 
 ➕ Complemento: ${order.address.complement}

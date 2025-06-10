@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { sendWhatsAppMessage } from "@/lib/sendWppMsg";
-import emailjs from "@emailjs/browser";
-import { formatOrderEmail } from "@/lib/sendEmail";
 
 export async function POST(req: Request) {
   try {
@@ -92,7 +90,7 @@ export async function POST(req: Request) {
       data: {
         orderId,
         address: { set: address },
-        user: user,
+        user,
         products: validatedProducts,
         price: totalFromServer,
         paymentMethod,

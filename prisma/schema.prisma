@@ -75,6 +75,7 @@ type Address {
   houseNumber  String
   cep          String
   city         String  @default("Barra de santa rosa")
+  ref          String?
   complement   String?
 }
 

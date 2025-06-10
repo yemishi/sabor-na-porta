@@ -12,10 +12,11 @@ interface Props {
 export default function UserAddressForm({ userInfo, refetch, onClose }: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm({
+  const form = useForm<{ street: string; houseNumber: string; neighborhood: string; cep: string; ref: string }>({
     street: { value: userInfo.address?.street || "", min: 3 },
     houseNumber: { value: userInfo.address?.houseNumber || "", min: 1 },
     neighborhood: { value: userInfo.address?.neighborhood || "", min: 2 },
+    ref: { value: userInfo.address?.ref || "" },
     cep: {
       value: userInfo.address?.cep || "",
       min: 9,
@@ -65,6 +66,7 @@ export default function UserAddressForm({ userInfo, refetch, onClose }: Props) {
       {isLoading && <Loading />}
 
       {form.fieldsKey.map((field) => {
+        if (field === "ref") return;
         const isHouseNumber = field === "houseNumber";
         const isCep = field === "cep";
 
@@ -92,6 +94,14 @@ export default function UserAddressForm({ userInfo, refetch, onClose }: Props) {
         };
         return isHouseNumber ? <InputNumber key={field} {...commonProps} /> : <Input key={field} {...commonProps} />;
       })}
+
+      <textarea
+        className="w-full min-h-14 text-base md:text-lg md:min-h-36 outline-none bg-cream border p-3 rounded-lg border-dark/40 transition"
+        placeholder="Ponto de referencia?"
+        value={form.values?.ref}
+        name="ref"
+        onChange={form.onChange}
+      />
 
       <div className="flex flex-col">
         <label className="text-sm font-medium text-muted">Cidade</label>
