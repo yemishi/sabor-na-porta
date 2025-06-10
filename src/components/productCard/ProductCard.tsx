@@ -75,7 +75,10 @@ export default function ProductCard({ product, variant, ...props }: Props) {
           <div className="md:hidden flex gap-1 font-semibold absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-primary px-2 py-1 rounded-full ">
             <span className="text-white">{formatBRL(variant.promotion || variant.price)}</span>
             {variant.promotion && (
-              <span className="text-xs line-through text-red-400 absolute -right-13">{formatBRL(variant.price)}</span>
+              <span className="text-xs bg-red-100 text-red-600 px-1.5 py-0.5 font-medium rounded-full absolute top-0 -right-13">
+                {formatBRL(variant.price)}
+                <span className="absolute left-2 top-1/2 w-12 h-[1px] bg-red-500 rotate-[-20deg]"></span>
+              </span>
             )}
           </div>
         )}
