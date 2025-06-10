@@ -4,6 +4,8 @@ import { Modal } from "@/components";
 import { Button, Image, InputNumber, Select } from "@/ui";
 import { formatBRL } from "@/helpers";
 import exit from "@/assets/icons/exit.svg";
+import cart from "@/assets/icons/cart.svg";
+
 import { useCart } from "@/hooks";
 
 type Props = {
@@ -78,7 +80,10 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
         </button>
 
         <div className="flex items-center gap-4">
-          <Image src={product.picture} className="size-30 sm:size-36 md:size-36 rounded-md object-contain bg-white" />
+          <Image
+            src={product.picture}
+            className="size-32 p-2 sm:size-36 md:size-36 rounded-md object-contain bg-white"
+          />
           <div className="flex flex-col h-full pt-2">
             <div className="mb-auto md:mt-5">
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-dark">
@@ -179,16 +184,17 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
           onChange={(e) => setObs(e.target.value)}
         />
 
-        <div className="flex justify-between items-center mt-auto">
+        <div className="flex justify-between items-center mt-auto mb-4">
           <span className="font-bold text-xl text-primary md:text-2xl">
             {isOutOfStock ? "Sem estoque" : `Total: ${formatBRL(totalPrice)}`}
           </span>
           <Button
-            className="bg-primary text-white font-semibold px-5 py-3 rounded text-base md:text-lg disabled:opacity-50"
+            className="bg-primary text-white font-semibold px-5 py-2 rounded text-base md:text-lg disabled:opacity-50 flex items-center gap-1 justify-center"
             disabled={!canAddToCart || isLimit}
             onClick={addToCart}
           >
-            Adicionar ao carrinho
+            Adicionar
+            <Image src={cart} className="size-full invert brightness-0" />
           </Button>
         </div>
       </div>

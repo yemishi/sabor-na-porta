@@ -17,7 +17,7 @@ export default function ProductCard({ product, variant, ...props }: Props) {
   const isOutOfStock = !variant.stock;
   return (
     <div
-      className={`${className} relative flex flex-col md:flex-row gap-3 max-[480]:mx-auto max-[480]:w-full max-[480]:max-w-64 w-50 h-67 md:h-auto md:w-full border
+      className={`${className} relative flex flex-col md:flex-row gap-3 max-[400]:mx-auto max-[400]:w-full min-[400]:w-44 min-[480]:w-52 h-67 md:h-auto md:w-full border
        rounded-xl md:pt-3 md:rounded-none`}
       onClick={() => {
         if (!isOutOfStock) setModalProduct(product);
@@ -42,7 +42,7 @@ export default function ProductCard({ product, variant, ...props }: Props) {
         <Image src={product.picture} className=" object-contain size-full" />
       </div>
 
-      <div className="flex flex-col pt-10 mt-auto  justify-between p-3 bg-card rounded-xl md:rotate-none md:bg-transparent md:mt-0  md:p-2 w-full">
+      <div className="flex flex-col pt-10 mt-auto justify-between p-3 bg-card rounded-xl md:rotate-none md:bg-transparent md:mt-0  md:p-2 w-full">
         <div className="flex flex-col gap-2 md:my-auto ">
           <div className="flex flex-col md:flex-row md:items-center md:gap-2">
             <span className="text-lg md:text-xl lg:text-2xl font-semibold capitalize line-clamp-1 md:line-clamp-2">
@@ -75,7 +75,7 @@ export default function ProductCard({ product, variant, ...props }: Props) {
           <div className="md:hidden flex gap-1 font-semibold absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-primary px-2 py-1 rounded-full ">
             <span className="text-white">{formatBRL(variant.promotion || variant.price)}</span>
             {variant.promotion && (
-              <span className="text-xs line-through text-accent absolute -right-13">{formatBRL(variant.price)}</span>
+              <span className="text-xs line-through text-red-300 absolute -right-13">{formatBRL(variant.price)}</span>
             )}
           </div>
         )}

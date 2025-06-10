@@ -48,7 +48,7 @@ export default function Page() {
             <CategoryPicker categories={categories as string[]} current={category} onChange={setCategory} />
           </div>
         )}
-        <div className="flex flex-col gap-3 flex-1 p-4 md:p-0">
+        <div className="flex flex-col gap-3 flex-1 p-2 md:p-0">
           <ProductGrid products={products} />
         </div>
 

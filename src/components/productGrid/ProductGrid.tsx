@@ -36,8 +36,8 @@ export default function ProductGrid({ products }: Props) {
     <section key={category} className="mb-10">
       <h2 className="title">{category}</h2>
       <div
-        className="flex md:py-2 flex-wrap md:flex-col gap-x-4 gap-y-15 md:gap-y-4
-      md:bg-dark md:text-white md:p-4 md:rounded-xl md:border md:border-white/30"
+        className="flex md:py-2 flex-wrap md:flex-col gap-x-2 gap-y-15 md:gap-y-4
+      md:bg-dark md:text-white md:p-4 md:rounded-xl md:border max-[400]:grid grid-cols-[1fr_1fr]  md:border-white/30"
       >
         {items.map((item, i) => {
           return (
