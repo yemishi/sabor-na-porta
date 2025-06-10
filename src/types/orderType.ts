@@ -5,7 +5,7 @@ export type Order = {
   orderId: string;
   address: Address;
   price: number;
-  createdAt: Date; // or string if from API
+  createdAt: Date; 
   paymentMethod: string;
   products: OrderProduct[];
   changeAmount?: number;
