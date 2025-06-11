@@ -18,6 +18,21 @@ const Modal = ({ children, onClose, ...props }: Props) => {
       document.body.style.overflow = "";
     };
   }, []);
+
+  // prevent go back when the modal's open
+  useEffect(() => {
+    window.history.pushState({ modal: true }, "");
+
+    const handlePopState = (e: PopStateEvent) => {
+      onClose();
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
   const handleBackdropClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     if (e.target === e.currentTarget) onClose();
