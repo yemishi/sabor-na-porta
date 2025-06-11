@@ -58,8 +58,10 @@ function DashboardOrdersPage() {
 
   const deleteOrder = useMutation({
     mutationFn: async (id: string) => {
+      const payload = { id };
       const res = await fetch(`/api/order/${id}`, {
         method: "DELETE",
+        body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error("Failed to delete order");
       return res.json();
