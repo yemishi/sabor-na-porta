@@ -24,7 +24,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!id) return NextResponse.json({ message: "id's missing" }, { status: 404 });
-  console.log("AAAAAAAA", id);
   const userPhone = req.nextUrl.searchParams.get("userPhone");
   const status = req.nextUrl.searchParams.get("status");
 
@@ -44,5 +43,16 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   } catch (error) {
     console.log(error);
     return NextResponse.json({ message: "Erro interno ao tentar mudar o pedido." }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextResponse, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  if (!id) return NextResponse.json({ message: "id's missing" }, { status: 404 });
+  try {
+    await db.order.delete({ where: { id } });
+    return NextResponse.json({ message: "Pedido deletado com sucesso!" }, { status: 201 });
+  } catch (error) {
+    return NextResponse.json({ message: "Tivemos um problema ao tentar deletar o pedido </3" }, { status: 400 });
   }
 }
