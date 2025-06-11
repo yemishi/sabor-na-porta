@@ -84,8 +84,8 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
             src={product.picture}
             className="size-32 p-2 sm:size-36 md:size-36 rounded-md object-contain bg-white"
           />
-          <div className="flex flex-col h-full pt-2">
-            <div className="mb-auto md:mt-5">
+          <div className="flex flex-col h-full pt-2 overflow-x-hidden">
+            <div className="mb-auto md:mt-5 ">
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-dark">
                 {product.name} {variant.name}
               </h2>
