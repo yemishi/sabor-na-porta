@@ -44,13 +44,13 @@ export default function ProductCard({ product, variant, ...props }: Props) {
 
       <div className="flex flex-col pt-10 mt-auto justify-between p-3 bg-card rounded-xl md:rotate-none md:bg-transparent md:mt-0  md:p-2 w-full">
         <div className="flex flex-col gap-2 md:my-auto ">
-          <div className="flex flex-col md:flex-row md:items-center md:gap-2">
-            <span className="text-lg md:text-xl lg:text-2xl font-semibold capitalize line-clamp-1 md:line-clamp-2">
+          <div className="flex flex-col md:gap-2">
+            <span className="text-lg md:text-xl lg:text-2xl font-semibold capitalize line-clamp-2 md:line-clamp-2">
               {product.name}
             </span>
 
             <span className="text-base md:text-xl lg:text-2xl text-primary md:text-secondary font-medium md:font-semibold capitalize line-clamp-1">
-              {variant.name}
+              {product.variants.map((v) => v.name).join(", ")}
             </span>
           </div>
           <span className="text-sm sm:text-base md:text-lg line-clamp-1 md:line-clamp-2">{variant.desc}</span>
