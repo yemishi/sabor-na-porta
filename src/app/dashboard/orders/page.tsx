@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Suspense, useState } from "react";
 import { useDashboardQuery } from "../context/DashboardProvider";
 import { useSession } from "next-auth/react";
+import { PopConfirm } from "@/components";
 
 const statusOptions: OrderStatus[] = ["pending", "in_progress", "out_for_delivery", "delivered", "canceled"];
 
@@ -28,6 +29,7 @@ function DashboardOrdersPage() {
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "">("");
   const { query } = useDashboardQuery();
   const { data, status: userStatus } = useSession();
+  const [isDeleteOrder, setIsDeleteOrder] = useState("");
 
   const {
     values: orders,
@@ -54,10 +56,31 @@ function DashboardOrdersPage() {
     },
   });
 
+  const deleteOrder = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(`/api/order/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Failed to delete order");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboard-orders", selectedStatus, query] });
+    },
+  });
   if (isLoading || userStatus === "loading") return <Loading isPage />;
 
   return (
     <div className="p-4 max-w-6xl mx-auto">
+      {isDeleteOrder && (
+        <PopConfirm
+          confirm={() => {
+            deleteOrder.mutate(isDeleteOrder);
+            setIsDeleteOrder("");
+          }}
+          onClose={() => setIsDeleteOrder("")}
+        />
+      )}
       <h1 className="text-2xl font-bold mb-6">Pedidos</h1>
 
       <div className="mb-6">
@@ -78,7 +101,15 @@ function DashboardOrdersPage() {
 
       <div className="flex flex-col gap-6">
         {orders.map((order, i) => (
-          <div key={`${order.id}_${i}`} className="border rounded-xl p-4 bg-card shadow-sm">
+          <div key={`${order.id}_${i}`} className="border rounded-xl p-4 bg-card shadow-sm relative">
+            <Button
+              onClick={() => {
+                setIsDeleteOrder(order.id);
+              }}
+              className="bg-red-500 px-4 py-1 hover:bg-red-600 absolute right-3 top-2"
+            >
+              Deletar
+            </Button>
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
               <div className="flex-1 gap-1 flex flex-col md:text-lg">
                 <p className="font-semibold text-lg md:text-xl">Pedido #{order.orderId}</p>
