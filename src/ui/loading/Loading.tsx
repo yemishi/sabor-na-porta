@@ -3,9 +3,10 @@ import { HTMLAttributes } from "react";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   isPage?: boolean;
+  spinBorderColor?: string;
 }
 
-export default function Loading({ isPage = true, ...props }: Props) {
+export default function Loading({ spinBorderColor, isPage = true, ...props }: Props) {
   const { className, ...rest } = props;
 
   return (
@@ -19,7 +20,11 @@ export default function Loading({ isPage = true, ...props }: Props) {
       )}
       role="status"
     >
-      <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+      <div
+        className={`w-10 h-10 border-4 ${
+          spinBorderColor ?? "border-primary"
+        }  border-t-transparent rounded-full animate-spin`}
+      />
       <span className="sr-only">Carregando...</span>
     </div>
   );
