@@ -63,7 +63,7 @@ export default function CategoryPicker({ categories, current, onChange }: Catego
         <button
           key={cat}
           onClick={() => onChange(cat.toLowerCase())}
-          className={`${baseClass} ${cat === "promo" && current !== "promo" ? "glow-shadow" : ""} ${
+          className={`${baseClass} ${cat === "promo" && current !== "promo" ? "animate-pulse-glow" : ""} ${
             current.toLowerCase() === cat.toLowerCase() ? isActiveClass : isInactiveClass
           }          `}
         >
