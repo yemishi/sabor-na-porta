@@ -40,7 +40,6 @@ export async function GET(req: NextRequest) {
         },
       }),
     ]);
-    console.log(count > take * (page + 1));
     return NextResponse.json({ products: allFilteredProducts, hasMore: count > take * (page + 1) });
   } catch (error) {
     console.error("Failed to fetch product:", error);
