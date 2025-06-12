@@ -3,6 +3,7 @@ import "./globals.css";
 import Provider from "@/context/Provider";
 import { Header, StoreStatusBanner } from "@/components";
 import Footer from "@/components/footer/Footer";
+import Analytics from "@/analytics/Analytics";
 
 export const metadata: Metadata = {
   title: "Sabor na Porta - Delivery de Comida Rápida e Saborosa",
@@ -24,6 +25,7 @@ export default function RootLayout({
       <Provider session={session}>
         <body className="min-h-screen flex flex-col overflow-x-hidden">
           <Header />
+          <Analytics />
           <StoreStatusBanner />
           <main className="w-full min-h-full max-w-7xl mx-auto">{children}</main>
           <Footer />
