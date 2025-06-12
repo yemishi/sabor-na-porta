@@ -17,8 +17,10 @@ export default function ProductCard({ product, variant, ...props }: Props) {
   const isOutOfStock = !variant.stock;
   return (
     <div
-      className={`${className} relative flex flex-col md:flex-row gap-3 max-[400]:mx-auto max-[400]:w-52 min-[400]:w-auto min-[480]:w-52 h-67 md:h-auto md:w-full border
-       rounded-xl md:pt-3 md:rounded-none`}
+      className={`${className} ${
+        variant.promotion ? "glow-shadow" : ""
+      } relative rounded-2xl flex flex-col md:flex-row gap-3 max-[400]:mx-auto max-[400]:w-52 min-[400]:w-auto min-[480]:w-52
+       h-67 md:h-auto md:w-full border md:pt-3 md:rounded-none`}
       onClick={() => {
         if (!isOutOfStock) setModalProduct(product);
       }}
@@ -28,7 +30,7 @@ export default function ProductCard({ product, variant, ...props }: Props) {
         <AddToCartModal variant={variant} onClose={() => setModalProduct(false)} product={modalProduct} />
       )}
       {isOutOfStock && (
-        <div className="absolute inset-0 z-1 bg-black/40 backdrop-blur rounded-xl flex items-center justify-center text-center p-4">
+        <div className="absolute inset-0 z-1 bg-black/40 backdrop-blur rounded-2xl flex items-center justify-center text-center p-4">
           <div>
             <h3 className="mt-1 absolute top-0 left-2/4 -translate-x-2/4 font-medium text-background">
               {product.name} - {variant.name}
@@ -38,11 +40,11 @@ export default function ProductCard({ product, variant, ...props }: Props) {
         </div>
       )}
 
-      <div className="w-full absolute -top-5 md:static h-38 object-contain hover:scale-105 transition md:w-52 md:h-36 md:bg-cream p-1 rounded-xl">
+      <div className="w-full absolute -top-5 md:static h-38 object-contain hover:scale-105 transition md:w-52 md:h-36 md:bg-cream p-1 rounded-2xl">
         <Image src={product.picture} alt={product.name} className=" object-contain size-full" />
       </div>
 
-      <div className="flex flex-col h-3/4 md:h-auto pt-14 mt-auto pb-10 md:pb-2 justify-between p-3 bg-card rounded-xl md:rotate-none md:bg-transparent md:mt-0  md:p-2 w-full">
+      <div className="flex flex-col h-3/4 md:h-auto pt-14 mt-auto pb-10 md:pb-2 justify-between p-3 bg-card rounded-2xl md:rotate-none md:bg-transparent md:mt-0  md:p-2 w-full">
         <div className="flex flex-col gap-2 md:my-auto ">
           <div className="flex flex-col md:gap-2">
             <h3 className="text-lg md:text-xl lg:text-2xl font-semibold capitalize line-clamp-2">{product.name}</h3>

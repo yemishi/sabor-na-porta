@@ -48,7 +48,7 @@ export default function CategoryPicker({ categories, current, onChange }: Catego
       onMouseMove={handleMouseMove}
       style={{ scrollbarWidth: "none" }}
       className={`
-        flex gap-3 overflow-x-auto pb-3 mb-4 md:divide-y md:divide-white/30 cursor-grab md:cursor-pointer active:cursor-grabbing md:active:cursor-pointer md:border md:border-dark/30
+        flex gap-3 py-2  overflow-x-auto mb-4 md:divide-y md:divide-white/30 cursor-grab md:cursor-pointer active:cursor-grabbing md:active:cursor-pointer md:border md:border-dark/30
         md:flex-col md:overflow-x-hidden md:overflow-y-auto md:gap-4 md:bg-dark rounded-xl
         md:w-full md:max-h-[calc(100vh-120px)]
       `}
@@ -63,7 +63,7 @@ export default function CategoryPicker({ categories, current, onChange }: Catego
         <button
           key={cat}
           onClick={() => onChange(cat.toLowerCase())}
-          className={`${baseClass} ${
+          className={`${baseClass} ${cat === "promo" && current !== "promo" ? "glow-shadow" : ""} ${
             current.toLowerCase() === cat.toLowerCase() ? isActiveClass : isInactiveClass
           }          `}
         >
