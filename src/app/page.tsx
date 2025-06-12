@@ -44,30 +44,32 @@ export default function Page() {
           <CategoryPicker categories={categories as string[]} current={category} onChange={setCategory} />
         </div>
       )}
-      <Search value={search} handleValue={(v: string) => setSearch(v)} />
-      <ErrorWrapper error={isError} message={error?.message}>
-        {isLoading ? (
-          <div>
-            <Loading className="mt-5" isPage={false} />
-          </div>
-        ) : (
-          <>
-            {products.length > 0 ? (
-              <div className="flex flex-col gap-3 flex-1 p-2 md:p-0">
-                <ProductGrid products={products} />
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center gap-2 text-center text-muted mt-10">
-                <Image src={zoomIcon} className="size-12 opacity-50" />
-                <p className="text-lg font-medium">Nenhum produto encontrado</p>
-                <p className="text-sm text-gray-500">Tente ajustar os filtros ou procurar por outro nome.</p>
-              </div>
-            )}
-            {isFetchingNextPage && <Loading className="mt-5" isPage={false} />}
-            {!isFetchingNextPage && hasNextPage && <div ref={ref} />}
-          </>
-        )}
-      </ErrorWrapper>
+      <div className="w-full">
+        <Search value={search} handleValue={(v: string) => setSearch(v)} />
+        <ErrorWrapper error={isError} message={error?.message}>
+          {isLoading ? (
+            <div>
+              <Loading className="mt-5" isPage={false} />
+            </div>
+          ) : (
+            <>
+              {products.length > 0 ? (
+                <div className="flex flex-col gap-3 flex-1 p-2 md:p-0">
+                  <ProductGrid products={products} />
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center gap-2 text-center text-muted mt-10">
+                  <Image src={zoomIcon} className="size-12 opacity-50" />
+                  <p className="text-lg md:text-xl font-medium">Nenhum produto encontrado</p>
+                  <p className="text-sm md:text-base text-gray-500">Tente ajustar os filtros ou procurar por outro nome.</p>
+                </div>
+              )}
+              {isFetchingNextPage && <Loading className="mt-5" isPage={false} />}
+              {!isFetchingNextPage && hasNextPage && <div ref={ref} />}
+            </>
+          )}
+        </ErrorWrapper>
+      </div>
     </div>
   );
 }
