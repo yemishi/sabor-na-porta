@@ -18,7 +18,7 @@ export default function ProductCard({ product, variant, ...props }: Props) {
   return (
     <div
       className={`${className} ${
-        variant.promotion ? "glow-shadow" : ""
+        variant.promotion ? "animate-pulse-glow md:animate-none" : ""
       } relative rounded-2xl flex flex-col md:flex-row gap-3 max-[400]:mx-auto max-[400]:w-52 min-[400]:w-auto min-[480]:w-52
        h-67 md:h-auto md:w-full border md:pt-3 md:rounded-none`}
       onClick={() => {
