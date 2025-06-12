@@ -62,10 +62,12 @@ export function CategoryPicker({ categories, current, onChange }: CategoryPicker
       {categories.map((cat) => (
         <button
           key={cat}
-          onClick={() => onChange(cat)}
-          className={`${baseClass} ${current === cat ? isActiveClass : isInactiveClass}          `}
+          onClick={() => onChange(cat.toLowerCase())}
+          className={`${baseClass} ${
+            current.toLowerCase() === cat.toLowerCase() ? isActiveClass : isInactiveClass
+          }          `}
         >
-          {cat}
+          {cat === "promo" ? "Promoções" : cat}
         </button>
       ))}
     </div>
