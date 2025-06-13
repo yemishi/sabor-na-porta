@@ -69,7 +69,7 @@ Cep: ${address.cep}
       const obs = item.obs ? `\n    📝 Obs: ${item.obs}` : "";
       return `
 ${item.qtd} x ${item.name}
-💵 ${item.qtd} x R$ ${item.price.toFixed(2)} = R$ ${(item.qtd * item.price).toFixed(2)}${addons}${obs}
+💵 ${item.qtd} x R$ ${item.price / item.qtd} = R$ ${item.price.toFixed(2)}${addons}${obs}
 `.trim();
     })
     .join("\n\n");
