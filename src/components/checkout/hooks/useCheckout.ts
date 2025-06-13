@@ -82,24 +82,19 @@ export function useCheckout({ sessionPhone, paymentMethod, changeAmount }: Props
 
       setOrderPlaced(true);
       setStatus("idle");
-      const formattedDate = new Date(data.order.createdAt).toLocaleString("pt-BR", {
-        dateStyle: "short",
-        timeStyle: "short",
-      });
-      console.log(formattedDate);
+
       const templateParams = {
-        formattedDate,
+        name: "Sabor Na porta",
+        ...formatOrderEmail(data.order),
       };
       try {
-        const email = await emailjs.send(
+        await emailjs.send(
           process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
           process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
           templateParams,
           { publicKey: process.env.NEXT_PUBLIC_EMAILJS_USER_ID! }
         );
-        console.log("EmailJS success:", email);
       } catch (err) {
-        console.error("EmailJS failed to send:", err);
         return data;
       }
       return data;
