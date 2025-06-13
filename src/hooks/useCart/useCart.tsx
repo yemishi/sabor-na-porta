@@ -27,12 +27,12 @@ const useCart = ({ product, variant }: Props) => {
         JSON.stringify(item.addons) === JSON.stringify(product.addons)
     );
 
-    const priceTotal =
-      (product.promotion ?? product.price) * product.qtd + (product.addons?.reduce((sum, a) => sum + a.price, 0) ?? 0);
-
     if (existingIndex !== -1) {
       const updatedCart = [...cart];
       const existing = updatedCart[existingIndex];
+      const priceTotal =
+        existing.priceTotal +
+        (product.price * product.qtd + (product.addons?.reduce((sum, a) => sum + a.price, 0) ?? 0));
       updatedCart[existingIndex] = {
         ...existing,
         qtd: existing.qtd + product.qtd,
@@ -42,6 +42,9 @@ const useCart = ({ product, variant }: Props) => {
       };
       setCart(updatedCart);
     } else {
+      const priceTotal =
+        (product.promotion ?? product.price) * product.qtd +
+        (product.addons?.reduce((sum, a) => sum + a.price, 0) ?? 0);
       setCart([...cart, { ...product, priceTotal }]);
     }
   };
