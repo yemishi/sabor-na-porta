@@ -12,16 +12,14 @@ export default function CheckoutSummary({
   method: string;
 }) {
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6">
+    <div className="w-full max-w-4xl mx-auto space-y-6 animate-dropDown">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-primary-200 shadow-md rounded-xl px-6 py-4">
         <span className="text-base font-medium text-primary-700 capitalize">
           Forma de pagamento: <span className="font-semibold text-primary-900">{method}</span>
         </span>
         <div className="relative mt-2 sm:mt-0">
           <span className="text-xl font-extrabold text-green-600 tracking-tight">{formatBRL(totalPrice)}</span>
-          {totalPrice < 10 && (
-            <span className="absolute top-full left-0 mt-1 text-xs text-red-500 font-medium">+ R$ 2,00 frete</span>
-          )}
+          {totalPrice < 10 && <span className=" ml-2 text-xs text-red-500 font-medium">+ R$ 2,00 frete</span>}
         </div>
       </div>
 
