@@ -1,3 +1,4 @@
+import { getMapLocationUrl } from "@/helpers";
 import { Order } from "@/types";
 
 const formatPhone = (phone: string) => {
@@ -69,9 +70,6 @@ export function formatCanceledOrderEmail(order: Order): { order_html: string; su
     })
     .join("\n");
 
-  const fullAddressString = `${order.address.street} ${order.address.houseNumber}, ${order.address.cep}`;
-  const encodedMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddressString)}`;
-
   const order_html = `
 ❌ PEDIDO CANCELADO
 
@@ -85,7 +83,7 @@ ${order.address.ref ? `🐼 Ponto de referencia: ${order.address.ref}` : ""}
 🏯 Casa Numero: ${order.address.houseNumber}
 👯 Bairro: ${order.address.neighborhood} 
 ➕ Complemento: ${order.address.complement}
-🗺️ Maps: ${encodedMapUrl}
+🗺️ Maps: ${getMapLocationUrl(order.address)}
 💳 Método de pagamento: ${order.paymentMethod}
 ${order.changeAmount ? `💰 Troco para: R$ ${order.changeAmount.toFixed(2)}` : ""}
 
