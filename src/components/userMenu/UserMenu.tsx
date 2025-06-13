@@ -27,7 +27,7 @@ export default function UserMenu() {
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, [open]);
-  const baseClass = "px-4 py-3 text-left hover:bg-accent hover:text-white cursor-pointer";
+  const baseClass = "px-4 py-3 text-left hover:bg-primary hover:text-white cursor-pointer";
   return (
     <div ref={ref} className="relative inline-block ">
       {isLogin && <Login onClose={() => setIsLogin(false)} />}
@@ -36,7 +36,13 @@ export default function UserMenu() {
       )}
       <button
         aria-label="menu"
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => {
+          if (!session) {
+            setIsLogin(true);
+            return;
+          }
+          setOpen((o) => !o);
+        }}
         className="cursor-pointer hover:brightness-110 focus:outline-none flex items-center gap-2 md:bg-dark md:px-4 md:py-1 md:rounded-full"
       >
         <Image src={userIcon} className="size-8 md:invert md:brightness-0" />
@@ -45,7 +51,7 @@ export default function UserMenu() {
 
       {open && (
         <div className="absolute -left-2 md:left-auto md:text-lg  mt-3 md:mt-5 w-48 md:w-56 bg-cream border border-dark/40 rounded shadow-lg animate-dropDown">
-          {session ? (
+          {session && (
             <div className="flex flex-col font-medium">
               <button
                 onClick={() => {
@@ -79,13 +85,6 @@ export default function UserMenu() {
                 Sair
               </button>
             </div>
-          ) : (
-            <button
-              onClick={() => setIsLogin(true)}
-              className="w-full px-4 py-3 text-left hover:bg-accent hover:text-white cursor-pointer rounded-b"
-            >
-              Entrar
-            </button>
           )}
         </div>
       )}
