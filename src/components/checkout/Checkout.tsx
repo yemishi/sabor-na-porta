@@ -35,6 +35,7 @@ export default function Checkout({ onClose }: Props) {
     totalPrice,
     cart,
     orderData,
+    isPlacing,
     orderStatus,
     placeOrder,
     cartFixIssues,
@@ -63,6 +64,7 @@ export default function Checkout({ onClose }: Props) {
     if (action === "address" && !user?.address) return true;
     if (action === "paymentMethod" && ((Number(changeAmount) > 0 && Number(changeAmount) < totalPrice) || !method))
       return true;
+    if (isPlacing) return true;
     return false;
   };
 
@@ -174,6 +176,7 @@ export default function Checkout({ onClose }: Props) {
           )}
         </div>
       )}
+
       <Button
         disabled={disabledNextAction()}
         onClick={nextAction}

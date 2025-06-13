@@ -19,7 +19,7 @@ export function useCheckout({ sessionPhone, paymentMethod, changeAmount }: Props
   const [cartSnapshot, setCartSnapshot] = useState<Cart>(cart);
   const [priceSnapshot, setPriceSnapshot] = useState(totalPrice < 10 ? totalPrice + 2.0 : totalPrice);
   const [orderPlaced, setOrderPlaced] = useState(false);
-
+  const [isPlacing, setIsPlacing] = useState(false);
   const [cartFixIssues, setCartFixIssues] = useState<{ id: string; reason: string }[]>([]);
   const [status, setStatus] = useState<"idle" | "fix-needed">("idle");
 
@@ -63,12 +63,13 @@ export function useCheckout({ sessionPhone, paymentMethod, changeAmount }: Props
         changeAmount,
         shippingFee: totalPrice < 10 ? 2.0 : null,
       };
-
+      setIsPlacing(true);
       const res = await fetch("/api/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newOrder),
       });
+      setIsPlacing(false);
 
       const data = await res.json();
       if (!res.ok) {
@@ -81,9 +82,13 @@ export function useCheckout({ sessionPhone, paymentMethod, changeAmount }: Props
 
       setOrderPlaced(true);
       setStatus("idle");
+      const formattedDate = new Date(data.order.createdAt).toLocaleString("pt-BR", {
+        dateStyle: "short",
+        timeStyle: "short",
+      });
+      console.log(formattedDate);
       const templateParams = {
-        name: "Sabor Na porta",
-        ...formatOrderEmail(data.order),
+        formattedDate,
       };
       try {
         const email = await emailjs.send(
@@ -126,6 +131,7 @@ export function useCheckout({ sessionPhone, paymentMethod, changeAmount }: Props
     orderError: placeOrderMutation.error,
     orderStatus: placeOrderMutation.status,
     orderPlaced,
+    isPlacing,
     status,
     orderData: placeOrderMutation.data?.order,
     orderRefetch: () => {

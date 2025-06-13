@@ -25,6 +25,7 @@ export async function GET(req: NextRequest) {
             orderId: { contains: q, mode: "insensitive" },
             status: { contains: status, mode: "insensitive" },
           },
+          orderBy: { createdAt: "desc" },
           take,
           skip,
         }),
@@ -49,6 +50,7 @@ export async function GET(req: NextRequest) {
         where: { orderId: { contains: q, mode: "insensitive" }, status: { contains: status, mode: "insensitive" } },
         take,
         skip,
+        orderBy: { createdAt: "desc" },
       }),
       db.order.count({
         where: { orderId: { contains: q, mode: "insensitive" }, status: { contains: status, mode: "insensitive" } },
