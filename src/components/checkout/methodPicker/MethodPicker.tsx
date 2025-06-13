@@ -26,7 +26,7 @@ export default function MethodPicker({ totalPrice, method, setMethod, changeAmou
           <div
             key={item.label}
             onClick={() => setMethod(item.label)}
-            className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer border transition-all w-full ${
+            className={`flex items-center gap-4 p-4 rounded-xl animate-dropDown cursor-pointer border transition-all w-full ${
               isActive ? "bg-accent" : ""
             }`}
           >

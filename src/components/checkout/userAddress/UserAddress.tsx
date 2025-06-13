@@ -5,7 +5,7 @@ export default function UserAddress({ userInfo, toggleForm }: { userInfo: User; 
   const { address, name } = userInfo;
 
   return address ? (
-    <div className="text-lg space-y-2 text-dark">
+    <div className="text-lg space-y-2 text-dark animate-dropDown">
       <p className="font-semibold text-primary">{name}</p>
       <p>
         {address.street}, Nº {address.houseNumber}
