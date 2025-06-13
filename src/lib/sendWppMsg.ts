@@ -1,3 +1,4 @@
+import { getMapLocationUrl } from "@/helpers";
 import { Order } from "@/types";
 
 export async function sendWhatsAppMessage({ phone, message }: { phone: string; message: string }) {
@@ -50,9 +51,6 @@ export const formatOrderMessage = (order: Order) => {
   const user = order.user;
   const address = order.address;
 
-  const fullAddressString = `${address.street} ${address.houseNumber}, ${address.neighborhood}, ${address.city}, ${address.cep}`;
-  const encodedMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddressString)}`;
-
   const deliveryAddress = `
 🛵   Endereço de entrega
 Rua: ${address.street} ${address.houseNumber}
@@ -60,7 +58,7 @@ ${order.address.ref ? `Ponto de referencia: ${order.address.ref}` : ""}
 Complemento: ${address.complement ?? "-"}
 Bairro: ${address.neighborhood}
 Cep: ${address.cep}
-📍 Localização: ${encodedMapUrl}
+📍 Localização: ${getMapLocationUrl(address)}
 `.trim();
 
   const itemList = order.products
