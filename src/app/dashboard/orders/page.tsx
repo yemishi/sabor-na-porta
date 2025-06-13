@@ -112,53 +112,100 @@ function DashboardOrdersPage() {
             >
               Deletar
             </Button>
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-              <div className="flex-1 gap-1 flex flex-col md:text-lg">
-                <p className="font-semibold text-lg md:text-xl">Pedido #{order.orderId}</p>
+
+            <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6">
+              {/* LEFT SIDE */}
+              <div className="flex-1 flex flex-col gap-2 md:text-lg">
+                <div>
+                  <p className="font-semibold text-lg md:text-xl">Pedido #{order.orderId}</p>
+                  <p className="font-semibold text-lg md:text-xl">
+                    Método: {order.paymentMethod}{" "}
+                    {order.changeAmount ? `— Troco para: ${formatBRL(order.changeAmount)}` : ""}
+                  </p>
+                </div>
+
                 <p>
                   {formatDate(order.createdAt)} — <strong>{formatBRL(order.price)}</strong>
                 </p>
+
                 <p>
-                  Cliente:{" "}
-                  <span className="font-medium uppercase  md:text-xl ml-1">
+                  Cliente:
+                  <span className="font-medium uppercase md:text-xl ml-1">
                     {order.user.name} — {order.user.phone}
                   </span>
                 </p>
 
                 <div className="flex flex-col space-y-1 font-medium">
                   <p>
-                    Endereço: <span className="text-primary uppercase  md:text-xl ml-1">{order.address.street}</span>,
-                    Nº <span className="text-primary uppercase  md:text-xl ml-1">{order.address.houseNumber}</span>
+                    Endereço:
+                    <span className="text-primary uppercase md:text-xl ml-1">{order.address.street}</span>, Nº{" "}
+                    <span className="text-primary uppercase md:text-xl ml-1">{order.address.houseNumber}</span>
                   </p>
                   <p>
-                    Bairro:<span className="text-primary uppercase ml-1 ">{order.address.neighborhood}</span>
+                    Bairro:<span className="text-primary uppercase ml-1">{order.address.neighborhood}</span>
                     {order.address.complement && (
                       <>
                         {" "}
                         — Complemento:
-                        <span className="text-primary md:text-xl  uppercase ml-1">{order.address.complement}</span>
+                        <span className="text-primary md:text-xl uppercase ml-1">{order.address.complement}</span>
                       </>
                     )}
                   </p>
 
                   {order.address.ref && (
                     <p>
-                      Ponto de referencia:<span className="text-primary uppercase ml-1 ">{order.address.ref}</span>
+                      Ponto de referência:<span className="text-primary uppercase ml-1">{order.address.ref}</span>
                     </p>
                   )}
                 </div>
+
+                <div className="mt-4 border-t border-dark/10 pt-4 flex flex-col gap-3">
+                  {order.products.map((product: any) => (
+                    <div
+                      key={product.id}
+                      className="bg-cream p-4 rounded-lg shadow-sm border border-dark/5 flex flex-col gap-1"
+                    >
+                      <div className="flex justify-between items-center">
+                        <p className="text-base md:text-lg font-semibold text-dark">
+                          🧺 {product.qtd}x {product.name}
+                        </p>
+                        <p className="text-sm text-dark/70">
+                          {formatBRL(product.price)} <span className="text-dark">cada</span>
+                        </p>
+                      </div>
+
+                      {product.addons?.length > 0 && (
+                        <p className="text-sm text-dark/80">
+                          ➕ <span className="font-medium text-primary">Adicionais:</span>{" "}
+                          <span className="italic">{product.addons.join(", ")}</span>
+                        </p>
+                      )}
+
+                      {product.obs && (
+                        <p className="text-sm text-dark/80">
+                          📝 <span className="font-medium text-primary">Observações:</span>{" "}
+                          <span className="italic">{product.obs}</span>
+                        </p>
+                      )}
+
+                      <div className="text-right text-sm font-semibold text-dark mt-2">
+                        💰 Subtotal: {formatBRL(product.qtd * product.price)}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row self-center sm:items-center gap-2 md:gap-4">
+              <div className="flex flex-col sm:flex-row md:flex-col self-center sm:items-center gap-3">
                 <span
                   className={`text-sm font-medium px-3 py-1 rounded-full text-center min-w-[120px]
-                    ${
-                      order.status === "delivered"
-                        ? "bg-green-100 text-green-800"
-                        : order.status === "canceled"
-                        ? "bg-red-400 text-white"
-                        : "bg-dark/50 text-cream"
-                    }`}
+              ${
+                order.status === "delivered"
+                  ? "bg-green-100 text-green-800"
+                  : order.status === "canceled"
+                  ? "bg-red-400 text-white"
+                  : "bg-dark/50 text-cream"
+              }`}
                 >
                   {translateOrderStatus(order.status)}
                 </span>
@@ -178,7 +225,6 @@ function DashboardOrdersPage() {
             </div>
           </div>
         ))}
-
         {isFetchingNextPage && <Loading isPage={false} />}
         {!isFetchingNextPage && hasNextPage && <div ref={ref} />}
       </div>
