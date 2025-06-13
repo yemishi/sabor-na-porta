@@ -2,13 +2,14 @@
 
 import { useScrollQuery } from "@/hooks";
 import { Order, OrderStatus, User, translateOrderStatus } from "@/types";
-import { formatBRL, formatDate } from "@/helpers";
-import { Button, Loading, Select } from "@/ui";
+import { formatBRL, formatDate, getMapLocationUrl } from "@/helpers";
+import { Button, Image, Loading, Select } from "@/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Suspense, useState } from "react";
 import { useDashboardQuery } from "../context/DashboardProvider";
 import { useSession } from "next-auth/react";
 import { PopConfirm } from "@/components";
+import mapIcon from "@/assets/icons/map-pin.svg";
 import Link from "next/link";
 
 const statusOptions: OrderStatus[] = ["pending", "in_progress", "out_for_delivery", "delivered", "canceled"];
@@ -94,8 +95,8 @@ function DashboardOrdersPage() {
           className="bg-card w-52"
         >
           <option value="">Todos</option>
-          {statusOptions.map((status) => (
-            <option key={status} value={status}>
+          {statusOptions.map((status, i) => (
+            <option key={`${status}_${i}`} value={status}>
               {translateOrderStatus(status)}
             </option>
           ))}
@@ -104,11 +105,6 @@ function DashboardOrdersPage() {
 
       <div className="flex flex-col gap-6">
         {orders.map((order, i) => {
-          const fullAddressString = `${order.address.street} ${order.address.houseNumber}, ${order.address.neighborhood}, ${order.address.city}, ${order.address.cep}`;
-          const encodedMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-            fullAddressString
-          )}`;
-
           return (
             <div key={`${order.id}_${i}`} className="border rounded-xl p-4 bg-card shadow-sm relative">
               <Button
@@ -121,8 +117,8 @@ function DashboardOrdersPage() {
               </Button>
 
               <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6">
-                <Link className="bg-blue-300 w-fit p-2 rounded-xl font-medium text-white" href={encodedMapUrl}>
-                  Map localizacao
+                <Link className="bg-black p-2 rounded-full w-fit" href={getMapLocationUrl(order.address)}>
+                  <Image src={mapIcon} className="size-8 invert" />
                 </Link>
                 <div className="flex-1 flex flex-col gap-2 md:text-lg">
                   <div>
@@ -169,37 +165,36 @@ function DashboardOrdersPage() {
                   </div>
 
                   <div className="mt-4 border-t border-dark/10 pt-4 flex flex-col gap-3">
-                    {order.products.map((product: any) => (
+                    {order.products.map(({ id, name, price, qtd, addons, obs }, i) => (
                       <div
-                        key={product.id}
+                        key={`${id}_${i}`}
                         className="bg-cream p-4 rounded-lg shadow-sm border border-dark/5 flex flex-col gap-1"
                       >
                         <div className="flex justify-between items-center">
                           <p className="text-base md:text-lg font-semibold text-dark">
-                            🧺 {product.qtd}x {product.name}
+                            🧺 {qtd}x {name}
                           </p>
                           <p className="text-sm text-dark/70">
-                            {product.qtd} × {formatBRL(product.price / product.qtd)} ={" "}
-                            <span className="text-dark">cada</span>
+                            {qtd} × {formatBRL(price / qtd)} = <span className="text-dark">cada</span>
                           </p>
                         </div>
 
-                        {product.addons?.length > 0 && (
+                        {addons && addons?.length > 0 && (
                           <p className="text-sm text-dark/80">
                             ➕ <span className="font-medium text-primary">Adicionais:</span>{" "}
-                            <span className="italic">{product.addons.join(", ")}</span>
+                            <span className="italic">{addons.join(", ")}</span>
                           </p>
                         )}
 
-                        {product.obs && (
+                        {obs && (
                           <p className="text-sm text-dark/80">
                             📝 <span className="font-medium text-primary">Observações:</span>{" "}
-                            <span className="italic">{product.obs}</span>
+                            <span className="italic">{obs}</span>
                           </p>
                         )}
 
                         <div className="text-right text-sm font-semibold text-dark mt-2">
-                          💰 Subtotal: {formatBRL(product.price)}
+                          💰 Subtotal: {formatBRL(price)}
                         </div>
                       </div>
                     ))}
@@ -225,8 +220,8 @@ function DashboardOrdersPage() {
                     onChange={(e) => updateStatus.mutate({ id: order.id, status: e.target.value as OrderStatus })}
                     className="min-w-[160px]"
                   >
-                    {statusOptions.map((s) => (
-                      <option key={s} value={s}>
+                    {statusOptions.map((s, i) => (
+                      <option key={`${s}_${i}`} value={s}>
                         {translateOrderStatus(s)}
                       </option>
                     ))}
