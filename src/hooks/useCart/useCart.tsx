@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { AddOn, CartProduct, Product, ProductVariant } from "@/types";
+import { AddOn, CartProduct, OrderAddons, Product, ProductVariant } from "@/types";
 import { useCartContext } from "@/context/Provider";
 
 type Props = {
@@ -19,20 +19,24 @@ const useCart = ({ product, variant }: Props) => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
+  const getAddonsTotalPrice = (addons?: OrderAddons[]) => {
+    return (
+      addons?.reduce((groupSum, group) => {
+        return groupSum + group.options.reduce((optSum, opt) => optSum + opt.price, 0);
+      }, 0) ?? 0
+    );
+  };
   const addItem = (product: Omit<CartProduct, "priceTotal">) => {
     const existingIndex = cart.findIndex(
       (item) =>
-        item.id === product.id &&
-        item.variantId === product.variantId &&
-        JSON.stringify(item.addons) === JSON.stringify(product.addons)
+        item.id === product.id && item.variantId === product.variantId && areAddonsEqual(item.addons, product.addons)
     );
 
     if (existingIndex !== -1) {
       const updatedCart = [...cart];
       const existing = updatedCart[existingIndex];
-      const priceTotal =
-        existing.priceTotal +
-        (product.price * product.qtd + (product.addons?.reduce((sum, a) => sum + a.price, 0) ?? 0));
+      const priceTotal = existing.priceTotal + (product.price * product.qtd + getAddonsTotalPrice(product.addons));
+
       updatedCart[existingIndex] = {
         ...existing,
         qtd: existing.qtd + product.qtd,
@@ -42,13 +46,10 @@ const useCart = ({ product, variant }: Props) => {
       };
       setCart(updatedCart);
     } else {
-      const priceTotal =
-        (product.promotion ?? product.price) * product.qtd +
-        (product.addons?.reduce((sum, a) => sum + a.price, 0) ?? 0);
+      const priceTotal = (product.promotion ?? product.price) * product.qtd + getAddonsTotalPrice(product.addons);
       setCart([...cart, { ...product, priceTotal }]);
     }
   };
-
   const updateQuantity = (product: CartProduct, newQtd: number) => {
     if (newQtd <= 0) {
       removeItem(product);
@@ -60,7 +61,7 @@ const useCart = ({ product, variant }: Props) => {
         ? {
             ...item,
             qtd: newQtd,
-            priceTotal: (item.price + (item.addons?.reduce((sum, a) => sum + a.price, 0) ?? 0)) * newQtd,
+            priceTotal: (item.price + getAddonsTotalPrice(item.addons)) * newQtd,
           }
         : item
     );
@@ -71,24 +72,32 @@ const useCart = ({ product, variant }: Props) => {
   const removeItem = (product: CartProduct) => setCart(cart.filter((item) => item !== product));
 
   const clearCart = () => setCart([]);
-
-  const areAddonsEqual = (a?: AddOn[], b?: AddOn[]) => {
+  const areAddonsEqual = (a?: OrderAddons[], b?: OrderAddons[]) => {
     if (!a && !b) return true;
     if (!a || !b) return false;
     if (a.length !== b.length) return false;
 
-    const sortBy = (arr: AddOn[]) => [...arr].sort((x, y) => x.name.localeCompare(y.name) || x.price - y.price);
+    const sortAddOnOptions = (addons: AddOn[]) =>
+      [...addons].sort((x, y) => x.name.localeCompare(y.name) || x.price - y.price);
 
-    const aSorted = sortBy(a);
-    const bSorted = sortBy(b);
+    const sortedA = [...a].sort((x, y) => x.title.localeCompare(y.title));
+    const sortedB = [...b].sort((x, y) => x.title.localeCompare(y.title));
 
-    return aSorted.every((addon, i) => {
-      return addon.name === bSorted[i].name && addon.price === bSorted[i].price;
+    return sortedA.every((groupA, index) => {
+      const groupB = sortedB[index];
+      if (groupA.title !== groupB.title) return false;
+
+      const optionsA = sortAddOnOptions(groupA.options);
+      const optionsB = sortAddOnOptions(groupB.options);
+
+      if (optionsA.length !== optionsB.length) return false;
+
+      return optionsA.every((opt, i) => opt.name === optionsB[i].name && opt.price === optionsB[i].price);
     });
   };
 
   const getCartTotalPrice = () => cart.reduce((total, item) => total + item.priceTotal, 0);
-  const getQuantity = (variantToCheck: ProductVariant, addons: AddOn[] = []) => {
+  const getQuantity = (variantToCheck: ProductVariant, addons: OrderAddons[] = []) => {
     if (!product || !variantToCheck) return 0;
 
     return cart
@@ -103,7 +112,7 @@ const useCart = ({ product, variant }: Props) => {
     setCart(updatedCart);
   };
 
-  const getObs = (addons?: AddOn[]) => {
+  const getObs = (addons?: OrderAddons[]) => {
     if (!product || !variant) return null;
 
     const match = cart.find(
