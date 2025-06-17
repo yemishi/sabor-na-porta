@@ -43,11 +43,11 @@ export default function AddOnSelector({ addons, setSelectedAddons, selectedAddon
 
   return (
     <div className="space-y-6">
-      {addons.map((group) => {
+      {addons.map((group, i) => {
         const currentGroup = selectedAddons.find((a) => a.title === group.title);
         const error = errors.find((e) => e.title === group.title);
         return (
-          <div key={group.title}>
+          <div key={`${group.title}_${i}`}>
             <span className="flex items-center gap-1 mb-1">
               <h4 className="text-lg font-semibold text-dark flex items-center gap-1">
                 {group.title}
@@ -57,11 +57,11 @@ export default function AddOnSelector({ addons, setSelectedAddons, selectedAddon
               {error && <p className="text-sm text-red-600">{error.message}</p>}
             </span>
             <div className="grid grid-cols-2 gap-2 mt-2">
-              {group.options.map((addon) => {
+              {group.options.map((addon, i) => {
                 const isSelected = currentGroup?.options.some((o) => o.name === addon.name);
                 return (
                   <button
-                    key={addon.name}
+                    key={`${addon.name}_${i}`}
                     onClick={() => toggleAddon(group.title, addon)}
                     className={`flex justify-between items-center p-3 rounded-lg border transition-all text-left
                     ${isSelected ? "bg-primary/10 border-primary text-primary" : "bg-card border-dark/20 text-dark"}

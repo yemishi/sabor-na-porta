@@ -188,7 +188,7 @@ export default function VariantsEditor({ variants, setVariants, highlights, setH
                     />
                     <Select
                       className="ml-4 border bg-black text-white p-1"
-                      value={group.type}
+                      value={group.type || ""}
                       onChange={(e) => updateAddOnGroup(i, gi, "type", e.target.value)}
                     >
                       <option value="single">Somente uma</option>

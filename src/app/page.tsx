@@ -61,7 +61,9 @@ export default function Page() {
                 <div className="flex flex-col items-center justify-center gap-2 text-center text-muted mt-10">
                   <Image src={zoomIcon} className="size-12 opacity-50" />
                   <p className="text-lg md:text-xl font-medium">Nenhum produto encontrado</p>
-                  <p className="text-sm md:text-base text-gray-500">Tente ajustar os filtros ou procurar por outro nome.</p>
+                  <p className="text-sm md:text-base text-gray-500">
+                    Tente ajustar os filtros ou procurar por outro nome.
+                  </p>
                 </div>
               )}
               {isFetchingNextPage && <Loading className="mt-5" isPage={false} />}
