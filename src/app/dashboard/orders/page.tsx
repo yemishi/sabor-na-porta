@@ -180,12 +180,22 @@ function DashboardOrdersPage() {
                         </div>
 
                         {addons && addons?.length > 0 && (
-                          <p className="text-sm text-dark/80">
+                          <p className="text-xs md:text-base text-dark/70 mt-1">
                             ➕ <span className="font-medium text-primary">Adicionais:</span>{" "}
-                            <span className="italic">{addons.join(", ")}</span>
+                            {addons.map(({ title, options }, idx) => (
+                              <span key={title}>
+                                {title} (
+                                {options.map((o, i) => (
+                                  <span key={o.name}>
+                                    {o.name}
+                                    {i < options.length - 1 ? ", " : ""}
+                                  </span>
+                                ))}
+                                ){addons && idx < addons.length - 1 ? ", " : ""}
+                              </span>
+                            ))}
                           </p>
                         )}
-
                         {obs && (
                           <p className="text-sm text-dark/80">
                             📝 <span className="font-medium text-primary">Observações:</span>{" "}

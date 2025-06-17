@@ -41,7 +41,7 @@ export default function PlaceOrderStep({
 }: Props) {
   if (isCartEmpty) {
     return (
-      <div className="w-full flex justify-center text-2xl font-bold text-black mb-2">
+      <div className="w-full flex justify-center text-2xl font-bold text-black mb-2 animate-dropDown">
         <h2>Seu carrinho está vazio</h2>
       </div>
     );
@@ -54,7 +54,7 @@ export default function PlaceOrderStep({
 
   if (status === "fix-needed" && cartFixIssues.length > 0) {
     return (
-      <div className="text-center py-8">
+      <div className="text-center py-8 animate-dropDown">
         <p className="text-red-600 font-semibold mb-4">⚠️ Seu carrinho precisa de ajustes:</p>
         <ul className="max-w-md mx-auto mb-4">
           {cartFixIssues.map((item) => (
@@ -76,7 +76,7 @@ export default function PlaceOrderStep({
   }
   if (orderStatus === "pending") {
     return (
-      <div className="flex flex-col items-center justify-center py-12 space-y-4 text-center">
+      <div className="flex flex-col items-center justify-center py-12 space-y-4 text-center animate-dropDown">
         <div className="text-6xl animate-spin">🍳</div>
         <p className="text-lg font-semibold"> Preparando seu pedido… Segure firme, a cozinha está a todo vapor!</p>
         <p className="text-sm md:text-base ">
@@ -88,7 +88,7 @@ export default function PlaceOrderStep({
 
   if (orderError || orderStatus === "error") {
     return (
-      <div className="w-full flex flex-col items-center">
+      <div className="w-full flex flex-col items-center animate-dropDown">
         <p className="text-center text-red-600 py-8">
           ❌ {orderError?.message ?? "Falha ao realizar o pedido. Tente novamente"}.
         </p>
@@ -99,10 +99,9 @@ export default function PlaceOrderStep({
     );
   }
 
-  const wppUrl = generateWppUrl("");
   if (isSuccess) {
     return (
-      <div className="max-w-md mx-auto text-center p-6">
+      <div className="max-w-md mx-auto text-center p-6 animate-dropDown">
         <div className="text-5xl mb-4">✔️</div>
         <h2 className="text-xl font-bold mb-2">Recebemos seu pedido</h2>
 
@@ -132,14 +131,7 @@ export default function PlaceOrderStep({
           </>
         )}
 
-        <div className="flex flex-col gap-3">
-          <button
-            onClick={() => window.open(generateWppUrl(formatOrderMessage(order)), "_blank")}
-            className="border border-black py-2 rounded hover:bg-black hover:text-white transition"
-          >
-            {order.paymentMethod.toLowerCase() === "pix" ? "📎 ENVIAR COMPROVANTE" : "📦 ACOMPANHE O PEDIDO"}
-          </button>
-
+        <div className="flex flex-col gap-3 animate-dropDown">
           <Button disabled={!order} onClick={trackOrder} className="bg-black text-white py-2 rounded">
             VER PEDIDO
           </Button>

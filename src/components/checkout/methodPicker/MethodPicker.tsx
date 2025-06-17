@@ -1,4 +1,3 @@
-import { useState } from "react";
 import coinSvg from "../assets/coins.svg";
 import pixSvg from "../assets/pix.svg";
 import cardSvg from "../assets/credit-card.svg";
