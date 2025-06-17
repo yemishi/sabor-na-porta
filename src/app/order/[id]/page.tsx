@@ -180,15 +180,27 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
                     </span>
                     <span className="font-bold text-secondary">{formatBRL(item.price)}</span>
                   </div>
-                  {item.addons && item.addons?.length > 0 && (
+                  {item.addons && item.addons.length > 0 && (
                     <p className="text-xs md:text-base text-dark/70 mt-1">
-                      <span className="font-medium text-accent">Adicionais:</span> {item.addons.join(", ")}
+                      <span className="font-medium text-primary">Adicionais:</span>{" "}
+                      {item.addons.map(({ title, options }, idx) => (
+                        <span key={title}>
+                          {title} (
+                          {options.map((o, i) => (
+                            <span key={o.name}>
+                              {o.name}
+                              {i < options.length - 1 ? ", " : ""}
+                            </span>
+                          ))}
+                          ){item.addons && idx < item.addons.length - 1 ? ", " : ""}
+                        </span>
+                      ))}
                     </p>
                   )}
                   {item.obs && (
-                    <p className="italic text-primary text-xs md:text-base mt-1 bg-muted rounded px-2 py-1">
-                      Obs: {item.obs}
-                    </p>
+                    <div className="mt-2 px-3 py-2 text-sm italic text-yellow-900 bg-card border-l-4 border-yellow-400 rounded">
+                      Observação: {item.obs}
+                    </div>
                   )}
                 </div>
               </li>
