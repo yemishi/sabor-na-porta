@@ -4,7 +4,7 @@ import Input from "./Input";
 
 interface InputBRLProps {
   label: string;
-  value: number;
+  value?: number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name: string;
   error?: string;
@@ -41,5 +41,13 @@ export default function InputBRL(props: InputBRLProps) {
     } as React.ChangeEvent<HTMLInputElement>);
   };
 
-  return <Input bgColor={bgColor} inputMode="numeric" value={formatBRL(value)} onChange={handleChange} {...rest} />;
+  return (
+    <Input
+      bgColor={bgColor}
+      inputMode="numeric"
+      value={value ? formatBRL(value) : ""}
+      onChange={handleChange}
+      {...rest}
+    />
+  );
 }
