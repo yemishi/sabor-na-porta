@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { AddOn, CartProduct, Product, ProductVariant } from "@/types";
+import { CartProduct, OrderAddons, Product, ProductVariant } from "@/types";
 import { Modal } from "@/components";
 import { Button, Image, InputNumber, Select } from "@/ui";
 import { formatBRL } from "@/helpers";
 import exit from "@/assets/icons/exit.svg";
 import cart from "@/assets/icons/cart.svg";
-
 import { useCart } from "@/hooks";
+import AddOnSelector from "./addonSelector/AddonSelector";
 
 type Props = {
   onClose: () => void;
@@ -15,12 +15,16 @@ type Props = {
 };
 
 export default function AddToCartModal({ onClose, product, variant: variantSelected }: Props) {
-  const { getQuantity, addItem, getObs } = useCart({ product, variant: variantSelected });
+  const { getQuantity, addItem, getObs } = useCart({
+    product,
+    variant: variantSelected,
+  });
 
-  const [selectedAddons, setSelectedAddons] = useState<AddOn[]>([]);
+  const [selectedAddons, setSelectedAddons] = useState<OrderAddons[]>([]);
+  const [addonErrors, setAddonErrors] = useState<{ title: string; message?: string }[]>([]);
   const [variant, setVariant] = useState<ProductVariant>(variantSelected);
 
-  const qtdData = getQuantity(variantSelected, selectedAddons);
+  const qtdData = getQuantity(variant, selectedAddons);
   const isLimit = variant.stock > 0 && qtdData >= variant.stock;
 
   const [quantity, setQuantity] = useState(!isLimit && variant.stock > 0 ? 1 : 0);
@@ -30,14 +34,10 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
     setObs(getObs(selectedAddons) || "");
   }, [selectedAddons]);
 
-  const toggleAddon = (addon: AddOn) => {
-    setSelectedAddons((prev) => {
-      const exists = prev.some((a) => a.name === addon.name);
-      return exists ? prev.filter((a) => a.name !== addon.name) : [...prev, addon];
-    });
-  };
+  const totalAddOnPrice = selectedAddons.reduce((total, group) => {
+    return total + group.options.reduce((sum, addon) => sum + addon.price, 0);
+  }, 0);
 
-  const totalAddOnPrice = selectedAddons.reduce((sum, addon) => sum + addon.price, 0);
   const basePrice = variant.promotion ?? variant.price;
   const totalPrice = (basePrice + totalAddOnPrice) * quantity;
 
@@ -46,13 +46,30 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
     if (found) {
       setVariant(found);
       setSelectedAddons([]);
-      setQuantity(!isLimit && variant.stock > 0 ? 1 : 0);
+      setQuantity(!isLimit && found.stock > 0 ? 1 : 0);
     }
   };
+
   const isOutOfStock = variant.stock === 0;
   const canAddToCart = quantity > 0 && quantity <= variant.stock;
 
   const addToCart = () => {
+    const missingRequiredAddons = variant.addons
+      .filter((group) => group.required)
+      .filter((requiredGroup) => {
+        const selected = selectedAddons.find((s) => s.title === requiredGroup.title);
+        return !selected || selected.options.length === 0;
+      });
+
+    if (missingRequiredAddons.length > 0) {
+      const errors = missingRequiredAddons.map((group) => ({
+        title: group.title,
+        message: `Você precisa escolher uma opção de ${group.title}.`,
+      }));
+      setAddonErrors(errors);
+      return;
+    }
+
     const cartProduct: CartProduct = {
       id: product.id,
       name: `${product.name}-${variant.name}`,
@@ -70,7 +87,7 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
   };
 
   return (
-    <Modal onClose={onClose} className="modal-container animate-dropDown ">
+    <Modal onClose={onClose} className="modal-container animate-dropDown">
       <div className="flex flex-col gap-5 p-5 sm:p-6 mx-auto rounded-xl w-full md:px-10 h-full overflow-y-auto">
         <button
           onClick={onClose}
@@ -85,7 +102,7 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
             className="size-32 p-2 sm:size-36 md:size-36 rounded-md object-contain bg-white"
           />
           <div className="flex flex-col h-full pt-2 overflow-x-hidden">
-            <div className="mb-auto md:mt-5 ">
+            <div className="mb-auto md:mt-5">
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-dark">
                 {product.name} {variant.name}
               </h2>
@@ -112,38 +129,12 @@ export default function AddToCartModal({ onClose, product, variant: variantSelec
           </div>
         )}
 
-        {variant.addons.length > 0 && (
-          <div>
-            <h3 className="text-lg font-semibold text-dark mb-3">Adicionais</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {variant.addons.map((addon) => {
-                const isSelected = selectedAddons.some((a) => a.name === addon.name);
-                return (
-                  <button
-                    key={addon.name}
-                    type="button"
-                    onClick={() => toggleAddon(addon)}
-                    className={`flex justify-between items-center p-3 rounded-lg border transition-all text-left
-          ${isSelected ? "bg-primary/10 border-primary text-primary" : "bg-card border-dark/20 text-dark"}
-          hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary`}
-                  >
-                    <div className="flex flex-col">
-                      <span className="font-medium md:text-lg">{addon.name}</span>
-                      <span className="text-sm text-dark md:text-base">{formatBRL(addon.price)}</span>
-                    </div>
-                    <div
-                      className={`size-5 rounded border border-dark/20 flex items-center justify-center ${
-                        isSelected ? "bg-primary text-white" : "bg-white"
-                      }`}
-                    >
-                      {isSelected && <span className="text-sm font-bold">✓</span>}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
+        <AddOnSelector
+          addons={variant.addons}
+          setSelectedAddons={setSelectedAddons}
+          selectedAddons={selectedAddons}
+          errors={addonErrors}
+        />
 
         {qtdData > 0 && (
           <div className="text-base sm:text-lg">
