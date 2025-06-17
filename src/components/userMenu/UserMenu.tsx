@@ -43,7 +43,7 @@ export default function UserMenu() {
           }
           setOpen((o) => !o);
         }}
-        className="cursor-pointer hover:brightness-110 focus:outline-none flex items-center gap-2 md:bg-dark md:px-4 md:py-1 md:rounded-full"
+        className="cursor-pointer md:max-w-40 hover:brightness-110 focus:outline-none flex items-center gap-2 md:bg-dark md:px-4 md:py-2 md:rounded-full"
       >
         <Image src={userIcon} className="size-8 md:invert md:brightness-0" />
         <span className="hidden md:inline text-lg font-semibold text-white">{session?.user.name ?? "Login"}</span>
