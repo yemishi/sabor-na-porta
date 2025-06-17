@@ -63,11 +63,21 @@ Cep: ${address.cep}
 
   const itemList = order.products
     .map((item) => {
-      const addons = item.addons?.length ? `\n    ➕ Extras: ${item.addons.join(", ")}` : "";
+      const addons =
+        item.addons && item.addons.length
+          ? `\n    ➕ Extras: ${item.addons
+              .map((addon) => `${addon.title} (${addon.options.map((o) => o.name).join(", ")})`)
+              .join(", ")}`
+          : "";
+
       const obs = item.obs ? `\n    📝 Obs: ${item.obs}` : "";
+
+      const unitPrice = (item.price / item.qtd).toFixed(2);
+      const totalPrice = item.price.toFixed(2);
+
       return `
 ${item.qtd} x ${item.name}
-💵 ${item.qtd} x R$ ${item.price / item.qtd} = R$ ${item.price.toFixed(2)}${addons}${obs}
+💵 ${item.qtd} x R$ ${unitPrice} = R$ ${totalPrice}${addons}${obs}
 `.trim();
     })
     .join("\n\n");

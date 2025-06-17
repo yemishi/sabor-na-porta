@@ -15,7 +15,13 @@ export function formatOrderEmail(order: Order): { order_html: string; subject: s
 
   const productLines = order.products
     .map((product) => {
-      const addons = product.addons?.length ? `\n    ➕ Adicionais: ${product.addons.join(", ")}` : "";
+      const addons =
+        product.addons && product.addons.length
+          ? `\n    ➕ Adicionais: ${product.addons
+              .map((addon) => `${addon.title} (${addon.options.map((o) => o.name).join(", ")})`)
+              .join(", ")}`
+          : "";
+
       const obs = product.obs ? `\n    📝 Obs: ${product.obs}` : "";
 
       return `- ${product.name} (x${product.qtd}) - R$ ${product.price.toFixed(2)}${addons}${obs}`;
@@ -63,7 +69,13 @@ export function formatCanceledOrderEmail(order: Order): { order_html: string; su
 
   const productLines = order.products
     .map((product) => {
-      const addons = product.addons?.length ? `\n    ➕ Adicionais: ${product.addons.join(", ")}` : "";
+      const addons =
+        product.addons && product.addons.length
+          ? `\n    ➕ Adicionais: ${product.addons
+              .map((addon) => `${addon.title} (${addon.options.map((o) => o.name).join(", ")})`)
+              .join(", ")}`
+          : "";
+
       const obs = product.obs ? `\n    📝 Obs: ${product.obs}` : "";
 
       return `- ${product.name} (x${product.qtd}) - R$ ${product.price.toFixed(2)}${addons}${obs}`;
