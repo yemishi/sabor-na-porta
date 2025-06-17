@@ -26,6 +26,7 @@ export default function ProductGrid({ products }: Props) {
     (acc, item) => {
       const category = item.category || "Sem categoria 😬";
       if (!acc[category]) acc[category] = [];
+
       acc[category].push(item);
       return acc;
     },

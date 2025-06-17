@@ -15,6 +15,7 @@ export default function ProductCard({ product, variant, ...props }: Props) {
   const [modalProduct, setModalProduct] = useState<Product | false>(false);
   const { className = "" } = props;
   const isOutOfStock = !variant.stock;
+
   return (
     <div
       className={`${className} ${
