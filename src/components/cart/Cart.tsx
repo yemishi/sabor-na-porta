@@ -154,7 +154,7 @@ export default function Cart() {
           <Button
             onClick={() => setIsCheckout(true)}
             disabled={!cart.length || scheduleError || scheduleLoading || !isStoreOpen}
-            className="mt-auto md:rounded-b-lg scale-100"
+            className="mt-auto md:rounded-b-lg md:mb-0 md:w-full md:rounded-none scale-100 mb-22 mx-auto rounded-xl animate-dropDown shadow-lg"
           >
             {buttonText}
           </Button>
