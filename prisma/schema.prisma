@@ -99,9 +99,9 @@ type AddOn {
 }
 
 type AddOnGroup {
-  title    String
-  type     SelectionType
-  required Boolean
+  title    String?
+  type     SelectionType?
+  required Boolean?
   options  AddOn[]
 }
 
