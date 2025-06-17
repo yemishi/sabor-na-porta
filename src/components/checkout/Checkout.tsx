@@ -12,6 +12,7 @@ import CheckoutSummary from "./summary/CheckoutSummary";
 import PlaceOrderStep from "./placeOrderStep/PlaceOrderStep";
 import { useCheckout } from "./hooks/useCheckout";
 import { useRouter } from "next/navigation";
+import { formatOrderMessage, generateWppUrl } from "@/lib/sendWppMsg";
 
 type Props = {
   onClose: () => void;
@@ -79,7 +80,6 @@ export default function Checkout({ onClose }: Props) {
     }
     if (action === "order") {
       onClose();
-      push("/");
       return;
     }
   };
@@ -152,7 +152,9 @@ export default function Checkout({ onClose }: Props) {
               setMethod={setMethod}
             />
           )}
-          {action === "summary" && <CheckoutSummary totalPrice={totalPrice} method={method} cart={cart} />}
+          {action === "summary" && (
+            <CheckoutSummary charge={changeAmount} totalPrice={totalPrice} method={method} cart={cart} />
+          )}
           {action === "order" && (
             <PlaceOrderStep
               cartFixIssues={cartFixIssues}
@@ -177,13 +179,25 @@ export default function Checkout({ onClose }: Props) {
         </div>
       )}
 
-      <Button
-        disabled={disabledNextAction()}
-        onClick={nextAction}
-        className="mt-auto max-sm:mb-20 bg-dark sm:mb-5 mx-auto"
-      >
-        {buttonText}
-      </Button>
+      {action !== "order" && (
+        <Button
+          disabled={disabledNextAction()}
+          onClick={nextAction}
+          className="mt-auto max-sm:mb-20 bg-dark sm:mb-5 mx-auto animate-dropDown"
+        >
+          {buttonText}
+        </Button>
+      )}
+
+      {orderData && (
+        <button
+          onClick={() => window.open(generateWppUrl(formatOrderMessage(orderData)), "_blank")}
+          className="border mt-auto max-sm:mb-20 bg-dark text-white font-semibold sm:mb-5 mx-auto border-black rounded-xl py-2 px-4 hover:bg-black hover:text-white
+           transition animate-dropDown"
+        >
+          {orderData.paymentMethod.toLowerCase() === "pix" ? "📎 ENVIAR COMPROVANTE" : "📦 ACOMPANHE O PEDIDO"}
+        </button>
+      )}
     </Modal>
   );
 }
