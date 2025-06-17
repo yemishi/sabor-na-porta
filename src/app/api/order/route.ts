@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { sendWhatsAppMessage } from "@/lib/sendWppMsg";
 
 export async function POST(req: Request) {
   try {
@@ -62,16 +61,21 @@ export async function POST(req: Request) {
 
       if (item.addons?.length) {
         for (const addon of item.addons) {
-          const addonFromDB = variant.addons.find((a) => a.name === addon.name);
-          if (addonFromDB) {
-            unitPrice += addonFromDB.price;
+          const variantAddonGroup = variant.addons.find((a) => a.title === addon.title);
+
+          if (variantAddonGroup) {
+            const totalAddonPrice = addon.options.reduce((sum: number, selectedOption: { name: string }) => {
+              const optionInVariant = variantAddonGroup.options.find((o) => o.name === selectedOption.name);
+              return sum + (optionInVariant?.price ?? 0);
+            }, 0);
+
+            unitPrice += totalAddonPrice;
           }
         }
       }
 
       const itemTotal = unitPrice * item.qtd;
       totalFromServer += itemTotal;
-
       validatedProducts.push({
         id: item.id,
         picture: item.picture,
@@ -79,12 +83,11 @@ export async function POST(req: Request) {
         price: itemTotal,
         qtd: item.qtd,
         obs: item.obs,
-        addons: item.addons?.map((a: { name: string }) => a.name) || [],
+        addons: item.addons,
       });
     }
 
     totalFromServer += shippingFee;
-
     const orderId = `${Math.floor(100000 + Math.random() * 900000)}`;
     const newOrder = await db.order.create({
       data: {
@@ -117,9 +120,6 @@ export async function POST(req: Request) {
       });
     }
 
-    /*     await sendWhatsAppMessage({
-      phone: user.phone,
-      message: `testando wpp api raaaaaah` }); */
     return NextResponse.json({ order: newOrder }, { status: 201 });
   } catch (error) {
     console.error("We had an error trying to create the order.", error);
