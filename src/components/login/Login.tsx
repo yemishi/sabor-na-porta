@@ -21,11 +21,11 @@ export default function Login({ onClose }: { onClose: () => void }) {
       value: "",
       validate: (val) => {
         const regex = /^\(\d{2}\)\s\d{5}-\d{4}$/;
-        return regex.test(val as string) ? null : "Phone must be in format (99) 99999-9999";
+        return regex.test(val as string) ? null : "Número precisa estar no formato (99) 99999-9999";
       },
     },
     password: { value: "", min: 3 },
-    name: { value: "", min: 3, max: 15 },
+    name: { value: "", min: 3 },
   });
 
   const signInFn = async () => {
@@ -117,7 +117,7 @@ export default function Login({ onClose }: { onClose: () => void }) {
           disabled={!!userState}
           error={errors.phone || ""}
           name="phone"
-          label="Phone Number"
+          label="Tel número"
           value={values.phone}
           onChange={onChange}
         />
@@ -133,7 +133,7 @@ export default function Login({ onClose }: { onClose: () => void }) {
             >
               <Input
                 autoFocus
-                label="Password"
+                label="Senha"
                 name="password"
                 isPassword
                 error={errors.password || ""}
@@ -153,7 +153,7 @@ export default function Login({ onClose }: { onClose: () => void }) {
             >
               <Input
                 autoFocus
-                label="Name"
+                label="Nome"
                 name="name"
                 error={errors.name || ""}
                 value={values.name}
