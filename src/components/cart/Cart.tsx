@@ -119,7 +119,7 @@ export default function Cart() {
                 </button>
               </div>
 
-              <div className="overflow-y-auto  p-2">
+              <div className="overflow-y-auto p-2">
                 {cart.map((item, index) => (
                   <div
                     key={index}
@@ -131,7 +131,9 @@ export default function Cart() {
                       <p className="text-base text-primary md:text-dark font-medium md:text-lg">{item.name}</p>
 
                       {item.addons && item.addons?.length > 0 && (
-                        <p className="text-sm text-accent">Extras: {item.addons.map((a) => a.name).join(", ")}</p>
+                        <p className="text-sm text-primary/50">
+                          Extras: {item.addons?.flatMap((a) => a.options.map((o) => o.name)).join(", ")}
+                        </p>
                       )}
 
                       {item.obs && <p className="text-sm italic text-dark line-clamp-2 ">Obs: {item.obs}</p>}
