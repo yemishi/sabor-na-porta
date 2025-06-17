@@ -13,12 +13,18 @@ export type ProductVariant = {
   stock: number;
   price: number;
   desc: string;
-  addons: AddOn[];
+  addons: AddOnGroup[];
   promotion?: number;
+};
+
+export type AddOnGroup = {
+  title: string;
+  type: "single" | "multiple";
+  required: boolean;
+  options: AddOn[];
 };
 
 export type AddOn = {
   name: string;
   price: number;
 };
-

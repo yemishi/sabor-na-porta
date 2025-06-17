@@ -1,4 +1,4 @@
-import { AddOn } from "./productType";
+import { OrderAddons } from "./orderType";
 
 export type Cart = CartProduct[];
 
@@ -11,6 +11,6 @@ export type CartProduct = {
   price: number;
   promotion: number;
   priceTotal: number;
-  addons?: AddOn[];
+  addons?: OrderAddons[];
   obs?: string;
 };

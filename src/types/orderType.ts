@@ -1,11 +1,11 @@
-import { Address, User } from "@/types";
+import { AddOn, Address, User } from "@/types";
 
 export type Order = {
   id: string;
   orderId: string;
   address: Address;
   price: number;
-  createdAt: Date; 
+  createdAt: Date;
   paymentMethod: string;
   products: OrderProduct[];
   changeAmount?: number;
@@ -21,9 +21,13 @@ export type OrderProduct = {
   qtd: number;
   price: number;
   obs?: string;
-  addons?: string[];
+  addons?: OrderAddons[];
 };
 
+export type OrderAddons = {
+  title: string;
+  options: AddOn[];
+};
 export type OrderStatus = "pending" | "in_progress" | "out_for_delivery" | "delivered" | "canceled";
 
 export const ORDER_STATUS_TRANSLATIONS: Record<OrderStatus, string> = {
