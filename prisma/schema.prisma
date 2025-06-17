@@ -1,6 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["mongoDb"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -66,7 +65,12 @@ type OrderProduct {
   name    String
   price   Float
   obs     String?
-  addons  String[]
+  addons  OrderProductAddons[]
+}
+
+type OrderProductAddons {
+  title   String
+  options AddOn[]
 }
 
 type Address {
@@ -82,14 +86,26 @@ type Address {
 type ProductVariant {
   id        String
   name      String
-  stock     Int     @default(0)
+  stock     Int          @default(0)
   price     Float
   desc      String?
   promotion Float?
-  addons    AddOn[]
+  addons    AddOnGroup[]
 }
 
 type AddOn {
   name  String
   price Float
+}
+
+type AddOnGroup {
+  title    String
+  type     SelectionType
+  required Boolean
+  options  AddOn[]
+}
+
+enum SelectionType {
+  single
+  multiple
 }
