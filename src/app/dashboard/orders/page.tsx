@@ -16,7 +16,7 @@ const statusOptions: OrderStatus[] = ["pending", "in_progress", "out_for_deliver
 
 export default function PageWrapper() {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<Loading isPage={false} />}>
       <DashboardOrdersPage />
     </Suspense>
   );
@@ -72,7 +72,7 @@ function DashboardOrdersPage() {
       queryClient.invalidateQueries({ queryKey: ["dashboard-orders", selectedStatus, query] });
     },
   });
-  if (isLoading || userStatus === "loading") return <Loading isPage />;
+  if (isLoading || userStatus === "loading") return <Loading isPage={false} />;
 
   return (
     <div className="p-4 max-w-6xl mx-auto">
@@ -85,7 +85,6 @@ function DashboardOrdersPage() {
           onClose={() => setIsDeleteOrder("")}
         />
       )}
-      <h1 className="text-2xl font-bold mb-6">Pedidos</h1>
 
       <div className="mb-6">
         <label className="mr-2 font-medium">Filtrar por status:</label>
@@ -111,7 +110,7 @@ function DashboardOrdersPage() {
                 onClick={() => {
                   setIsDeleteOrder(order.id);
                 }}
-                className="bg-red-500 px-4 py-1 hover:bg-red-600 absolute right-3 top-2"
+                className="bg-red-500 px-4 py-1 hover:bg-red-600 md:text-lg text-white absolute right-3 top-2"
               >
                 Deletar
               </Button>
@@ -211,9 +210,9 @@ function DashboardOrdersPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row md:flex-col self-center sm:items-center gap-3">
+                <div className="flex flex-col mt-auto sm:flex-row md:flex-col self-center sm:items-center gap-3">
                   <span
-                    className={`text-sm font-medium px-3 py-1 rounded-full text-center min-w-[120px]
+                    className={`text-sm md:text-base font-medium px-3 py-1 rounded-full text-center min-w-[120px]
               ${
                 order.status === "delivered"
                   ? "bg-green-100 text-green-800"
@@ -228,7 +227,7 @@ function DashboardOrdersPage() {
                   <Select
                     value={order.status}
                     onChange={(e) => updateStatus.mutate({ id: order.id, status: e.target.value as OrderStatus })}
-                    className="min-w-[160px]"
+                    className="min-w-[160px] bg-primary text-white"
                   >
                     {statusOptions.map((s, i) => (
                       <option key={`${s}_${i}`} value={s}>

@@ -14,7 +14,7 @@ const WEEKDAYS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"];
 
 export default function PageWrapper() {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<Loading isPage={false} />}>
       <SchedulePage />
     </Suspense>
   );

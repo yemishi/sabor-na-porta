@@ -15,11 +15,11 @@ export default function Page() {
     isActive: false,
   });
 
-  const [deleteProduct, setDeleteProduct] = useState({ error: "", id: "", isLoading: false });
+  const [deleteProduct, setDeleteProduct] = useState({ error: "", id: "", isLoading: false, name: "" });
   const { query } = useDashboardQuery();
 
   const closeEdit = () => setProductForm({ product: undefined, isActive: false });
-  const closeDelete = () => setDeleteProduct({ error: "", id: "", isLoading: false });
+  const closeDelete = () => setDeleteProduct({ error: "", id: "", isLoading: false, name: "" });
 
   const {
     values: products,
@@ -49,7 +49,7 @@ export default function Page() {
         return;
       }
 
-      setDeleteProduct({ id: "", isLoading: false, error: "" });
+      setDeleteProduct({ id: "", isLoading: false, error: "", name: "" });
       refetch();
     } catch (error) {
       setDeleteProduct({ ...deleteProduct, error: "something went wrong :(" });
@@ -57,28 +57,28 @@ export default function Page() {
   };
 
   return (
-    <div className="max-w-screen-xl mx-auto p-4">
+    <div className="max-w-screen-xl mx-auto p-4 flex flex-col">
       {productForm.isActive && <ProductForm refetch={refetch} product={productForm.product} onClose={closeEdit} />}
       {deleteProduct.id && (
         <PopConfirm
           confirm={fetchDelete}
           error={deleteProduct.error}
           isLoading={deleteProduct.isLoading}
+          name={deleteProduct.name}
           onClose={closeDelete}
+          desc="Você realmente deseja remover o produto"
         />
       )}
 
-      <div className="flex justify-end sm:justify-center md:justify-end mb-4">
-        <Button
-          onClick={() => setProductForm({ product: undefined, isActive: true })}
-          className="py-1 font-medium bg-primary"
-        >
-          Adicionar Produto
-        </Button>
-      </div>
+      <Button
+        onClick={() => setProductForm({ product: undefined, isActive: true })}
+        className="font-medium bg-green-600 ml-auto mb-4 md:text-lg md:font-semibold text-white"
+      >
+        Adicionar Produto
+      </Button>
 
       <ErrorWrapper error={isError} message={error?.message} refetch={refetch}>
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 place-items-center">
+        <div className="flex flex-wrap gap-x-4 gap-y-7">
           {products.length > 0 &&
             products.map((product) => {
               const variant = product.variants[0];
@@ -87,39 +87,44 @@ export default function Page() {
               return (
                 <div
                   key={`${product.id}_${product.name}`}
-                  className="flex flex-col gap-3 w-full max-w-[250px] border border-muted bg-primary-550 rounded-xl h-72 md:h-80 transition-shadow hover:shadow-xl"
+                  onClick={() => setProductForm({ product, isActive: true })}
+                  className="flex flex-col gap-3 w-full max-w-[250px] md:max-w-[280px] mx-auto  border border-muted bg-primary-550 rounded-xl h-72 md:h-80 transition-all shadow-secondary hover:shadow-lg animate-dropDown"
                 >
                   <Image
                     src={product.picture}
-                    className="h-40 w-full object-cover rounded-t-xl transition-transform duration-300 hover:scale-105"
+                    className="h-40 w-full object-contain bg-gradient-to-b border-b border-muted from-secondary/30 rounded-t-xl"
                   />
-                  <div className="flex flex-col w-full px-2">
-                    <span className="font-medium first-letter:uppercase text-lg line-clamp-2">
+                  <div className="flex flex-col w-full px-2 h-full">
+                    <span className="font-medium first-letter:uppercase text-lg md:text-xl line-clamp-2">
                       {product.name} - {variant.name}
                     </span>
 
-                    <div className="flex items-center gap-2 mt-1 text-secondary">
+                    <div className="flex items-center gap-2 mt-auto">
                       <div className="flex gap-1">
-                        <span className="text-primary font-semibold text-base">
+                        <span className=" font-semibold text-base md:text-lg text-green-600">
                           {formatBRL(hasPromo ? variant.promotion! : variant.price)}
                         </span>
-                        {hasPromo && <span className="text-xs line-through">{formatBRL(variant.price)}</span>}
+                        {hasPromo && (
+                          <span className="text-xs md:text-sm line-through text-red-500">
+                            {formatBRL(variant.price)}
+                          </span>
+                        )}
                       </div>
-                      <span className="ml-auto font-medium line-clamp-2">{product.category}</span>
+                      <span className="ml-auto font-medium line-clamp-2 md:text-lg text-primary">
+                        {product.category}
+                      </span>
                     </div>
                   </div>
 
-                  <div className="mt-auto grid grid-cols-2">
-                    <Button
-                      onClick={() => setDeleteProduct({ ...deleteProduct, id: product.id })}
-                      className="rounded-bl-xl bg-accent text-dark py-1"
-                    >
-                      Deletar
-                    </Button>
-                    <Button onClick={() => setProductForm({ product, isActive: true })} className="rounded-br-xl py-1">
-                      Editar
-                    </Button>
-                  </div>
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setDeleteProduct({ ...deleteProduct, id: product.id, name: product.name });
+                    }}
+                    className="rounded-b-xl scale-100 mt-auto bg-rose-500 text-white md:text-lg py-1"
+                  >
+                    REMOVER
+                  </Button>
                 </div>
               );
             })}
