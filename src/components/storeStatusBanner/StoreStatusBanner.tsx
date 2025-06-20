@@ -3,8 +3,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { getStoreStatus } from "@/helpers";
 import { Schedule } from "@/types";
+import { usePathname } from "next/navigation";
 
 export default function StoreStatusBar() {
+  const pathname = usePathname();
   const { data, isLoading, isError } = useQuery<Schedule[]>({
     queryKey: ["storeSchedule"],
     queryFn: async () => {
@@ -21,7 +23,6 @@ export default function StoreStatusBar() {
 
   const { open, message } = data ? getStoreStatus(data) : { open: false, message: "Carregando horário..." };
 
-  const baseClass = `sticky top-16 md:top-20 z-2 w-full shadow-sm transition-colors md:w-[80%] md:rounded-b-xl md:mx-auto `;
   const commonBarStyle = `
     flex items-center justify-center gap-2 
     text-sm md:text-base 
@@ -35,7 +36,11 @@ export default function StoreStatusBar() {
 
   if (isLoading) {
     return (
-      <div className={`${baseClass} bg-white`}>
+      <div
+        className={`z-2 w-full shadow-sm transition-colors md:w-[80%] md:rounded-b-xl md:mx-auto ${
+          pathname.startsWith("/dashboard") ? "" : "sticky top-16 md:top-20"
+        } bg-white`}
+      >
         <div className={`${commonBarStyle} text-gray-600`}>
           <span className={pulseDot("bg-gray-400")} />
           <span>Carregando horário...</span>
@@ -46,14 +51,22 @@ export default function StoreStatusBar() {
 
   if (isError) {
     return (
-      <div className={`${baseClass} bg-red-100`}>
+      <div
+        className={`z-2 w-full shadow-sm transition-colors md:w-[80%] md:rounded-b-xl md:mx-auto ${
+          pathname.startsWith("/dashboard") ? "" : "sticky top-16 md:top-20"
+        } bg-red-100`}
+      >
         <div className={`${commonBarStyle} text-red-800 text-center`}>Erro ao carregar horário de funcionamento.</div>
       </div>
     );
   }
 
   return (
-    <div className={`${baseClass} ${open ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+    <div
+      className={`z-2 w-full shadow-sm transition-colors md:w-[80%] md:rounded-b-xl md:mx-auto ${
+        pathname.startsWith("/dashboard") ? "" : "sticky top-16 md:top-20"
+      } ${open ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
+    >
       <div className={commonBarStyle}>
         <span className={pulseDot(open ? "bg-green-600" : "bg-red-400")} aria-hidden="true" />
         <span>{message}</span>
